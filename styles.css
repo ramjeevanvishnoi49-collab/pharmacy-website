@@ -1,0 +1,1453 @@
+/* ======================================================
+   PHARMACY MANAGEMENT SYSTEM
+   COMPLETE STYLESHEET - PHASE 2B
+====================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family:
+        Arial,
+        "Segoe UI",
+        sans-serif;
+    background: #f3f6f9;
+    color: #222;
+}
+
+/* ======================================================
+   COMMON
+====================================================== */
+
+.hidden {
+    display: none !important;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    background: #fff;
+    color: #222;
+    font-size: 14px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow:
+        0 0 0 3px rgba(13, 110, 253, 0.12);
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 16px;
+    background: #0d6efd;
+    color: #fff;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+h1,
+h2,
+h3,
+h4 {
+    color: #212529;
+}
+
+p {
+    line-height: 1.5;
+}
+
+
+/* ======================================================
+   AUTH SCREENS
+====================================================== */
+
+.screen {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0d6efd 0%,
+            #00a8ff 50%,
+            #00c6ff 100%
+        );
+}
+
+.auth-box {
+    width: 410px;
+    max-width: 100%;
+
+    background: #ffffff;
+
+    padding: 32px;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0, 0, 0, 0.25);
+
+    text-align: center;
+
+    animation:
+        authAppear 0.35s ease;
+}
+
+@keyframes authAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+.logo {
+    font-size: 58px;
+    margin-bottom: 5px;
+}
+
+.auth-box h1 {
+    margin: 5px 0 8px;
+    font-size: 26px;
+}
+
+.auth-box p {
+    margin: 0 0 18px;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.auth-box input {
+    margin: 6px 0;
+    padding: 13px;
+}
+
+.auth-box button {
+    width: 100%;
+    margin: 6px 0;
+    padding: 13px;
+}
+
+.auth-box .link {
+    background: transparent !important;
+    color: #0d6efd !important;
+    box-shadow: none;
+    font-size: 13px;
+}
+
+.auth-box .link:hover {
+    text-decoration: underline;
+    transform: none;
+}
+
+.success {
+    background: #198754 !important;
+}
+
+.secondary {
+    background: #495057 !important;
+}
+
+.danger {
+    background: #dc3545 !important;
+}
+
+.warning {
+    background: #ffc107 !important;
+    color: #212529 !important;
+}
+
+.result {
+    min-height: 20px;
+
+    margin: 12px 0;
+    padding: 12px;
+
+    border-radius: 8px;
+
+    background: #e8fff3;
+    color: #146c43;
+
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#otpSection {
+    margin-top: 10px;
+}
+
+
+/* ======================================================
+   MAIN APPLICATION
+====================================================== */
+
+#appScreen {
+    min-height: 100vh;
+    background: #f3f6f9;
+}
+
+
+/* ======================================================
+   TOP BAR
+====================================================== */
+
+.topbar {
+    min-height: 70px;
+
+    padding: 12px 22px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #0d6efd,
+            #087fdb
+        );
+
+    color: white;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0, 0, 0, 0.12);
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.topbar h2 {
+    margin: 0;
+    color: white;
+    font-size: 21px;
+}
+
+#loggedUser {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    opacity: 0.95;
+}
+
+.logout {
+    background: #dc3545 !important;
+    padding: 10px 18px;
+    white-space: nowrap;
+}
+
+
+/* ======================================================
+   DASHBOARD LAYOUT
+====================================================== */
+
+.dashboard {
+    display: flex;
+    min-height:
+        calc(100vh - 70px);
+}
+
+
+/* ======================================================
+   SIDEBAR
+====================================================== */
+
+.sidebar {
+    width: 235px;
+    min-width: 235px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #17202a,
+            #101820
+        );
+
+    padding: 15px;
+
+    box-shadow:
+        2px 0 10px
+        rgba(0, 0, 0, 0.08);
+}
+
+.sidebar button {
+    width: 100%;
+
+    display: block;
+
+    border: none;
+
+    background: transparent;
+
+    color: #e9ecef;
+
+    text-align: left;
+
+    padding: 13px 14px;
+
+    margin-bottom: 6px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.sidebar button:hover {
+    background: #0d6efd;
+    color: white;
+    transform: translateX(3px);
+}
+
+.sidebar button.active {
+    background: #0d6efd;
+    color: white;
+}
+
+
+/* ======================================================
+   MAIN CONTENT
+====================================================== */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+
+    padding: 25px;
+}
+
+.module {
+    width: 100%;
+    animation:
+        moduleAppear 0.2s ease;
+}
+
+@keyframes moduleAppear {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+/* ======================================================
+   SECTION HEADER
+====================================================== */
+
+.section-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+.section-header h1 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.section-header button {
+    white-space: nowrap;
+}
+
+
+/* ======================================================
+   CARDS
+====================================================== */
+
+.cards {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-top: 20px;
+}
+
+.card {
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    border-left:
+        5px solid #0d6efd;
+
+    box-shadow:
+        0 3px 12px
+        rgba(0, 0, 0, 0.06);
+
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 6px 18px
+        rgba(0, 0, 0, 0.09);
+}
+
+.card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+
+    color: #555;
+
+    font-size: 15px;
+}
+
+.card strong {
+    display: block;
+
+    font-size: 25px;
+
+    color: #212529;
+}
+
+
+/* ======================================================
+   PANELS
+====================================================== */
+
+.admin-panel {
+    margin-top: 20px;
+
+    padding: 22px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 3px 12px
+        rgba(0, 0, 0, 0.06);
+}
+
+.admin-panel h2 {
+    margin-top: 0;
+    margin-bottom: 18px;
+}
+
+.admin-panel h3 {
+    margin-top: 22px;
+}
+
+
+/* ======================================================
+   FORM GRID
+====================================================== */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 15px;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+    min-width: 0;
+}
+
+
+/* ======================================================
+   SEARCH BOX
+====================================================== */
+
+#medicineSearch,
+#patientSearch,
+#supplierSearch {
+    margin: 15px 0;
+
+    max-width: 500px;
+
+    padding: 13px;
+}
+
+
+/* ======================================================
+   TABLE WRAPPER
+====================================================== */
+
+.table-wrap {
+    width: 100%;
+
+    overflow-x: auto;
+
+    margin-top: 15px;
+    margin-bottom: 25px;
+
+    background: white;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0, 0, 0, 0.04);
+}
+
+
+/* ======================================================
+   TABLE
+====================================================== */
+
+table {
+    width: 100%;
+
+    min-width: 700px;
+
+    border-collapse: collapse;
+
+    background: white;
+}
+
+th,
+td {
+    padding: 11px 12px;
+
+    border-bottom:
+        1px solid #e9ecef;
+
+    text-align: left;
+
+    white-space: nowrap;
+
+    font-size: 13px;
+}
+
+th {
+    background:
+        #f1f4f7;
+
+    color: #343a40;
+
+    font-weight: 700;
+
+    position: sticky;
+    top: 0;
+}
+
+tbody tr:hover {
+    background: #f8f9fa;
+}
+
+td button {
+    padding: 7px 10px;
+    font-size: 12px;
+}
+
+
+/* ======================================================
+   TABLE STATUS
+====================================================== */
+
+.status-active {
+    color: #198754;
+    font-weight: bold;
+}
+
+.status-inactive {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.status-low {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.status-ok {
+    color: #198754;
+    font-weight: bold;
+}
+
+.status-expired {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.status-expiring {
+    color: #fd7e14;
+    font-weight: bold;
+}
+
+
+/* ======================================================
+   INFO BOX
+====================================================== */
+
+.info-box {
+    margin-top: 25px;
+
+    padding: 22px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    border-top:
+        5px solid #198754;
+
+    box-shadow:
+        0 3px 12px
+        rgba(0, 0, 0, 0.06);
+}
+
+.info-box h2 {
+    margin-top: 0;
+}
+
+
+/* ======================================================
+   ALERT BOXES
+====================================================== */
+
+.alert {
+    padding: 12px 15px;
+
+    border-radius: 8px;
+
+    margin: 8px 0;
+
+    font-size: 14px;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    color: #664d03;
+    border:
+        1px solid #ffecb5;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    color: #842029;
+    border:
+        1px solid #f5c2c7;
+}
+
+.alert-success {
+    background: #d1e7dd;
+    color: #0f5132;
+    border:
+        1px solid #badbcc;
+}
+
+.alert-info {
+    background: #cff4fc;
+    color: #055160;
+    border:
+        1px solid #b6effb;
+}
+
+
+/* ======================================================
+   MESSAGE
+====================================================== */
+
+.admin-message {
+    min-height: 20px;
+
+    margin: 12px 0;
+
+    color: #146c43;
+
+    font-weight: 500;
+}
+
+
+/* ======================================================
+   PURCHASE / SALES ITEMS
+====================================================== */
+
+#purchaseItemsBody input,
+#purchaseItemsBody select,
+#saleItemsBody input,
+#saleItemsBody select {
+    min-width: 100px;
+
+    padding: 8px;
+}
+
+#purchaseItemsBody button,
+#saleItemsBody button {
+    padding: 7px 10px;
+
+    font-size: 12px;
+
+    background: #dc3545;
+}
+
+
+/* ======================================================
+   INVOICE SUMMARY
+====================================================== */
+
+.invoice-summary {
+    margin-top: 20px;
+
+    margin-left: auto;
+
+    width: 330px;
+
+    max-width: 100%;
+
+    padding: 18px;
+
+    background: #f8f9fa;
+
+    border-radius: 10px;
+
+    border:
+        1px solid #e9ecef;
+}
+
+.invoice-summary p {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin: 8px 0;
+
+    color: #495057;
+}
+
+.invoice-summary h2 {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 0;
+
+    padding-top: 12px;
+
+    border-top:
+        1px solid #dee2e6;
+
+    font-size: 19px;
+}
+
+
+/* ======================================================
+   REPORT CARDS
+====================================================== */
+
+#reportsModule .cards {
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+#reportsModule .card {
+    border-left-color: #198754;
+}
+
+
+/* ======================================================
+   ADMIN
+====================================================== */
+
+#adminManagement .admin-panel {
+    margin-bottom: 25px;
+}
+
+#adminManagement select {
+    width: auto;
+    min-width: 130px;
+    padding: 7px;
+}
+
+
+/* ======================================================
+   BUTTON GROUP
+====================================================== */
+
+.button-group {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 15px;
+}
+
+
+/* ======================================================
+   EMPTY TABLE MESSAGE
+====================================================== */
+
+.empty-row {
+    text-align: center !important;
+
+    padding: 30px !important;
+
+    color: #6c757d;
+
+    font-style: italic;
+}
+
+
+/* ======================================================
+   LOADING
+====================================================== */
+
+.loading {
+    text-align: center;
+
+    padding: 25px;
+
+    color: #6c757d;
+}
+
+.loading::after {
+    content: "...";
+    animation:
+        loadingDots 1.2s infinite;
+}
+
+@keyframes loadingDots {
+
+    0% {
+        content: ".";
+    }
+
+    33% {
+        content: "..";
+    }
+
+    66% {
+        content: "...";
+    }
+
+    100% {
+        content: ".";
+    }
+
+}
+
+
+/* ======================================================
+   BADGES
+====================================================== */
+
+.badge {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    background: #e9ecef;
+
+    color: #495057;
+}
+
+.badge-success {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.badge-danger {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.badge-warning {
+    background: #fff3cd;
+    color: #664d03;
+}
+
+.badge-info {
+    background: #cff4fc;
+    color: #055160;
+}
+
+
+/* ======================================================
+   STOCK COLORS
+====================================================== */
+
+.stock-good {
+    color: #198754;
+    font-weight: bold;
+}
+
+.stock-low {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.stock-zero {
+    color: #842029;
+    font-weight: bold;
+    background: #f8d7da;
+}
+
+
+/* ======================================================
+   EXPIRY COLORS
+====================================================== */
+
+.expiry-good {
+    color: #198754;
+}
+
+.expiry-warning {
+    color: #fd7e14;
+    font-weight: bold;
+}
+
+.expiry-danger {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+
+/* ======================================================
+   PRINT INVOICE
+====================================================== */
+
+#invoicePrint {
+    background: white;
+}
+
+.invoice-container {
+    width: 800px;
+    max-width: 100%;
+
+    margin: 0 auto;
+
+    padding: 30px;
+
+    background: white;
+
+    color: #000;
+}
+
+.invoice-header {
+    text-align: center;
+
+    border-bottom:
+        2px solid #000;
+
+    padding-bottom: 15px;
+
+    margin-bottom: 15px;
+}
+
+.invoice-header h1 {
+    margin: 0;
+
+    font-size: 25px;
+}
+
+.invoice-header p {
+    margin: 4px 0;
+
+    font-size: 13px;
+}
+
+.invoice-details {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+}
+
+.invoice-details p {
+    margin: 3px 0;
+}
+
+.invoice-container table {
+    min-width: 0;
+
+    border:
+        1px solid #000;
+}
+
+.invoice-container th,
+.invoice-container td {
+    border:
+        1px solid #000;
+
+    color: #000;
+}
+
+.invoice-total {
+    width: 300px;
+
+    margin-left: auto;
+
+    margin-top: 20px;
+}
+
+.invoice-total p {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin: 7px 0;
+}
+
+.invoice-total .grand-total {
+    font-size: 19px;
+
+    font-weight: bold;
+
+    border-top:
+        2px solid #000;
+
+    padding-top: 10px;
+}
+
+
+/* ======================================================
+   SCROLLBAR
+====================================================== */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #adb5bd;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6c757d;
+}
+
+
+/* ======================================================
+   TABLET
+====================================================== */
+
+@media (max-width: 1100px) {
+
+    .sidebar {
+        width: 205px;
+        min-width: 205px;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .cards {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* ======================================================
+   MOBILE
+====================================================== */
+
+@media (max-width: 800px) {
+
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-width: 100%;
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 5px;
+
+        padding: 10px;
+    }
+
+    .sidebar button {
+        margin: 0;
+
+        padding: 11px;
+
+        font-size: 13px;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .section-header h1 {
+        font-size: 22px;
+    }
+
+    .section-header button {
+        width: 100%;
+    }
+
+    .topbar {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        text-align: center;
+
+        padding: 15px;
+    }
+
+    .logout {
+        width: 100%;
+    }
+
+    .admin-panel {
+        padding: 15px;
+    }
+
+    .invoice-summary {
+        width: 100%;
+    }
+
+}
+
+
+/* ======================================================
+   SMALL MOBILE
+====================================================== */
+
+@media (max-width: 480px) {
+
+    .screen {
+        padding: 12px;
+    }
+
+    .auth-box {
+        padding: 22px 18px;
+
+        border-radius: 14px;
+    }
+
+    .auth-box h1 {
+        font-size: 22px;
+    }
+
+    .logo {
+        font-size: 48px;
+    }
+
+    .sidebar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .sidebar button {
+        font-size: 12px;
+        padding: 10px 7px;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .card strong {
+        font-size: 22px;
+    }
+
+    .admin-panel {
+        padding: 12px;
+    }
+
+}
+
+
+/* ======================================================
+   PRINT
+====================================================== */
+
+@media print {
+
+    body {
+        background: white;
+    }
+
+    body > *:not(#invoicePrint) {
+        display: none !important;
+    }
+
+    #invoicePrint {
+        display: block !important;
+
+        position: static;
+
+        width: 100%;
+
+        background: white;
+    }
+
+    .invoice-container {
+        width: 100%;
+
+        padding: 10px;
+
+        box-shadow: none;
+    }
+
+    @page {
+        size: A4;
+        margin: 10mm;
+    }
+
+}
+
+/* HTML layout compatibility */
+.auth-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #0d6efd, #00a8ff, #00c6ff);
+}
+
+.app-layout {
+    display: flex;
+    min-height: calc(100vh - 70px);
+}
+
+.app-footer {
+    padding: 18px;
+    text-align: center;
+    color: #6c757d;
+    background: #fff;
+    border-top: 1px solid #e9ecef;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-weight: 700;
+}
+
+.top-user {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.logout-btn {
+    background: #dc3545 !important;
+    white-space: nowrap;
+}
+
+.welcome-card,
+.form-card,
+.table-card {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.form-card h3,
+.table-card h3 {
+    margin-top: 0;
+}
+
+.form-actions,
+.total-box,
+.table-header,
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-actions,
+.total-box {
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.total-box {
+    justify-content: flex-end;
+}
+
+.grand-total {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.table-header {
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.search-box input {
+    min-width: 220px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.dashboard-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    background: #fff;
+    border-radius: 12px;
+    border-left: 5px solid #0d6efd;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.dashboard-card h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.dashboard-card strong {
+    font-size: 22px;
+}
+
+.card-icon {
+    font-size: 28px;
+}
+
+.stock-info {
+    margin: 8px 0;
+    color: #146c43;
+    font-weight: 600;
+}
+
+@media (max-width: 800px) {
+    .app-layout {
+        flex-direction: column;
+    }
+
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .top-user {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
