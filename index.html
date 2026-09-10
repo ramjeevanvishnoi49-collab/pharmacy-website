@@ -1,0 +1,7621 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Pharmacy Management System</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --primary:#1769aa;
+    --primary-dark:#0d4775;
+    --secondary:#00a884;
+    --danger:#dc3545;
+    --warning:#f59e0b;
+    --success:#198754;
+    --info:#0dcaf0;
+    --bg:#f3f6fa;
+    --card:#ffffff;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --border:#dfe5ec;
+    --sidebar:#102a43;
+    --sidebar-hover:#1d4f73;
+}
+
+body{
+    font-family:
+        Arial,
+        "Noto Sans Devanagari",
+        sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+button,
+input,
+select,
+textarea{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* ================= AUTH ================= */
+
+#authScreen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:
+        linear-gradient(135deg,#0d4775,#1769aa,#00a884);
+}
+
+.auth-card{
+    width:100%;
+    max-width:440px;
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+
+.logo-box{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.logo-icon{
+    width:75px;
+    height:75px;
+    border-radius:50%;
+    background:#e9f5ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 12px;
+    font-size:38px;
+}
+
+.logo-box h1{
+    color:var(--primary);
+    font-size:25px;
+}
+
+.logo-box p{
+    color:var(--muted);
+    margin-top:5px;
+}
+
+.auth-form{
+    display:none;
+}
+
+.auth-form.active{
+    display:block;
+}
+
+.form-group{
+    margin-bottom:14px;
+}
+
+.form-group label{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width:100%;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:11px 12px;
+    outline:none;
+    background:white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(23,105,170,.1);
+}
+
+.btn{
+    border:0;
+    border-radius:8px;
+    padding:10px 15px;
+    font-weight:700;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:white;
+}
+
+.btn-success{
+    background:var(--success);
+    color:white;
+}
+
+.btn-danger{
+    background:var(--danger);
+    color:white;
+}
+
+.btn-warning{
+    background:var(--warning);
+    color:#111;
+}
+
+.btn-info{
+    background:var(--info);
+    color:#062d38;
+}
+
+.btn-secondary{
+    background:#6b7280;
+    color:white;
+}
+
+.btn-light{
+    background:#eef2f7;
+    color:#1f2937;
+}
+
+.btn-block{
+    width:100%;
+}
+
+.auth-links{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:15px;
+}
+
+.auth-links button{
+    background:none;
+    border:0;
+    color:var(--primary);
+    font-weight:700;
+}
+
+.auth-message{
+    margin-bottom:12px;
+    padding:10px;
+    border-radius:8px;
+    display:none;
+    font-size:13px;
+}
+
+.auth-message.error{
+    display:block;
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.auth-message.success{
+    display:block;
+    background:#dcfce7;
+    color:#166534;
+}
+
+/* ================= APP ================= */
+
+#app{
+    min-height:100vh;
+    display:flex;
+}
+
+.sidebar{
+    width:250px;
+    background:var(--sidebar);
+    color:white;
+    min-height:100vh;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    z-index:1000;
+    overflow-y:auto;
+}
+
+.sidebar-brand{
+    padding:20px;
+    border-bottom:1px solid rgba(255,255,255,.12);
+}
+
+.sidebar-brand h2{
+    font-size:20px;
+}
+
+.sidebar-brand small{
+    color:#b9d5ea;
+}
+
+.nav-menu{
+    padding:12px 8px;
+}
+
+.nav-title{
+    color:#91aec4;
+    font-size:11px;
+    text-transform:uppercase;
+    padding:12px 12px 6px;
+}
+
+.nav-item{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:#e8f1f8;
+    padding:11px 13px;
+    border-radius:8px;
+    text-align:left;
+    margin-bottom:3px;
+    font-size:14px;
+}
+
+.nav-item:hover,
+.nav-item.active{
+    background:var(--sidebar-hover);
+}
+
+.nav-item span:first-child{
+    display:inline-block;
+    width:27px;
+}
+
+.main{
+    margin-left:250px;
+    width:calc(100% - 250px);
+    min-height:100vh;
+}
+
+.topbar{
+    height:65px;
+    background:white;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    position:sticky;
+    top:0;
+    z-index:900;
+}
+
+.topbar-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.menu-toggle{
+    display:none;
+    border:0;
+    background:#eef2f7;
+    padding:9px;
+    border-radius:8px;
+}
+
+.user-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.user-avatar{
+    width:38px;
+    height:38px;
+    background:#dbeafe;
+    color:var(--primary);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.content{
+    padding:20px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:18px;
+}
+
+.page-header h1{
+    font-size:24px;
+}
+
+.page-header p{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:3px;
+}
+
+.header-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+/* ================= DASHBOARD ================= */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stat-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:18px;
+    box-shadow:0 2px 8px rgba(0,0,0,.03);
+}
+
+.stat-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.stat-icon{
+    width:45px;
+    height:45px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    background:#eaf4ff;
+}
+
+.stat-card h3{
+    margin-top:15px;
+    font-size:25px;
+}
+
+.stat-card p{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:18px;
+    margin-bottom:18px;
+}
+
+.card-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.card-title h2{
+    font-size:17px;
+}
+
+.card-title small{
+    color:var(--muted);
+}
+
+/* ================= TABLE ================= */
+
+.table-wrap{
+    width:100%;
+    overflow:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:700px;
+}
+
+th,
+td{
+    padding:10px 9px;
+    border-bottom:1px solid var(--border);
+    text-align:left;
+    font-size:13px;
+}
+
+th{
+    background:#f7f9fc;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+tr:hover td{
+    background:#fbfdff;
+}
+
+.badge{
+    display:inline-block;
+    padding:4px 8px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:700;
+}
+
+.badge-success{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.badge-danger{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.badge-warning{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.badge-info{
+    background:#cffafe;
+    color:#155e75;
+}
+
+/* ================= FORMS ================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.form-grid-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.form-grid-4{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.form-grid-2{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+.inline{
+    display:flex;
+    gap:8px;
+    align-items:end;
+    flex-wrap:wrap;
+}
+
+.input-search{
+    position:relative;
+}
+
+.input-search input{
+    padding-left:35px;
+}
+
+.input-search span{
+    position:absolute;
+    left:11px;
+    top:10px;
+}
+
+/* ================= SALE ================= */
+
+.sale-customer-grid{
+    grid-template-columns:repeat(4,1fr);
+}
+
+.sale-search-row{
+    display:grid;
+    grid-template-columns:1fr 180px;
+    gap:8px;
+    margin-top:6px;
+}
+
+.sale-search-row input{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+}
+
+.sale-search-row input:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(23,105,170,.1);
+}
+
+.payment-methods{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:12px;
+    margin-top:15px;
+    font-size:13px;
+}
+
+.payment-methods label{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    cursor:pointer;
+}
+
+@media(max-width:800px){
+    .sale-customer-grid,
+    .sale-search-row{
+        grid-template-columns:1fr;
+    }
+}
+
+.sale-layout{
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    gap:18px;
+}
+
+.sale-summary{
+    background:#f8fafc;
+    border-radius:10px;
+    padding:15px;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    padding:6px 0;
+    font-size:14px;
+}
+
+.summary-row.total{
+    border-top:1px solid var(--border);
+    margin-top:7px;
+    padding-top:12px;
+    font-size:20px;
+    font-weight:800;
+}
+
+.sale-product-row{
+    display:grid;
+    grid-template-columns:2fr .7fr .8fr .8fr auto;
+    gap:8px;
+    align-items:end;
+    margin-bottom:10px;
+}
+
+.sale-product-row input,
+.sale-product-row select{
+    width:100%;
+    padding:9px;
+    border:1px solid var(--border);
+    border-radius:7px;
+}
+
+.medicine-search-box{
+    position:relative;
+    margin-bottom:14px;
+}
+
+.medicine-search-box input{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+}
+
+.medicine-search-box input:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(23,105,170,.1);
+}
+
+.medicine-suggestions{
+    position:absolute;
+    left:0;
+    right:0;
+    top:100%;
+    z-index:20;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:8px;
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+    max-height:240px;
+    overflow:auto;
+}
+
+.medicine-suggestion{
+    width:100%;
+    display:block;
+    border:0;
+    border-bottom:1px solid #eef2f7;
+    background:white;
+    text-align:left;
+    padding:10px 12px;
+}
+
+.medicine-suggestion:hover{
+    background:#f0f7ff;
+}
+
+.medicine-suggestion small{
+    display:block;
+    color:var(--muted);
+    margin-top:3px;
+}
+
+.selected-medicine-details{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:8px;
+    margin-bottom:14px;
+}
+
+.selected-medicine-details input{
+    width:100%;
+    padding:8px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:#f8fafc;
+    color:var(--text);
+}
+
+@media(max-width:800px){
+    .selected-medicine-details{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+.sale-items-table{
+    min-width:850px;
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:3000;
+    padding:20px;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    background:white;
+    width:100%;
+    max-width:700px;
+    max-height:90vh;
+    overflow:auto;
+    border-radius:15px;
+}
+
+.modal-header{
+    padding:16px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+}
+
+.modal-body{
+    padding:18px;
+}
+
+.modal-footer{
+    padding:15px;
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+}
+
+.close-modal{
+    border:0;
+    background:#f1f5f9;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+}
+
+/* ================= TOAST ================= */
+
+#toastContainer{
+    position:fixed;
+    right:20px;
+    top:80px;
+    z-index:5000;
+    width:min(380px,calc(100% - 40px));
+}
+
+.toast{
+    background:#111827;
+    color:white;
+    padding:13px 15px;
+    border-radius:9px;
+    margin-bottom:8px;
+    box-shadow:0 8px 30px rgba(0,0,0,.2);
+    animation:toastIn .2s ease;
+}
+
+.toast.success{
+    background:#166534;
+}
+
+.toast.error{
+    background:#991b1b;
+}
+
+.toast.warning{
+    background:#92400e;
+}
+
+@keyframes toastIn{
+    from{
+        transform:translateY(-10px);
+        opacity:0;
+    }
+    to{
+        transform:translateY(0);
+        opacity:1;
+    }
+}
+
+/* ================= LOADING ================= */
+
+.loading{
+    text-align:center;
+    padding:30px;
+    color:var(--muted);
+}
+
+.spinner{
+    display:inline-block;
+    width:25px;
+    height:25px;
+    border:3px solid #ddd;
+    border-top-color:var(--primary);
+    border-radius:50%;
+    animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* ================= PRINT ================= */
+
+@media print{
+    body *{
+        visibility:hidden;
+    }
+
+    #printArea,
+    #printArea *{
+        visibility:visible;
+    }
+
+    #printArea{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        background:white;
+    }
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:1100px){
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .sale-layout{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:800px){
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        width:100%;
+    }
+
+    .menu-toggle{
+        display:block;
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
+
+    .grid-2,
+    .form-grid,
+    .form-grid-2,
+    .form-grid-3,
+    .form-grid-4{
+        grid-template-columns:1fr;
+    }
+
+    .page-header{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .content{
+        padding:12px;
+    }
+
+    .sale-product-row{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .sale-product-row > :first-child{
+        grid-column:1/-1;
+    }
+}
+
+@media(max-width:500px){
+    .topbar{
+        padding:0 10px;
+    }
+
+    .topbar-left h2{
+        font-size:16px;
+    }
+
+    .user-box > div:not(.user-avatar){
+        display:none;
+    }
+
+    .auth-card{
+        padding:22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ========================================================= -->
+<!-- AUTH SCREEN -->
+<!-- ========================================================= -->
+
+<div id="authScreen">
+
+    <div class="auth-card">
+
+        <div class="logo-box">
+            <div class="logo-icon">💊</div>
+            <h1>Pharmacy Management</h1>
+            <p>Complete Pharmacy & General Store System</p>
+        </div>
+
+        <div id="authMessage" class="auth-message"></div>
+
+        <!-- LOGIN -->
+        <form id="loginForm" class="auth-form active">
+
+            <div class="form-group">
+                <label>Username / Mobile</label>
+                <input
+                    id="loginUsername"
+                    type="text"
+                    required
+                    placeholder="Username या Mobile">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input
+                    id="loginPassword"
+                    type="password"
+                    required
+                    placeholder="Password">
+            </div>
+
+            <button class="btn btn-primary btn-block">
+                🔐 Login
+            </button>
+
+            <div class="auth-links">
+                <button type="button" onclick="showAuth('signup')">
+                    Create Account
+                </button>
+
+                <button type="button" onclick="showAuth('forgot')">
+                    Forgot Password?
+                </button>
+            </div>
+
+        </form>
+
+        <!-- SIGNUP -->
+        <form id="signupForm" class="auth-form">
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input id="signupName" required>
+            </div>
+
+            <div class="form-group">
+                <label>Username</label>
+                <input id="signupUsername" required>
+            </div>
+
+            <div class="form-group">
+                <label>Mobile</label>
+                <input
+                    id="signupMobile"
+                    maxlength="10"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input
+                    id="signupPassword"
+                    type="password"
+                    required>
+            </div>
+
+            <button class="btn btn-success btn-block">
+                📝 Create Account
+            </button>
+
+            <div class="auth-links">
+                <button type="button" onclick="showAuth('login')">
+                    ← Back to Login
+                </button>
+            </div>
+
+        </form>
+
+        <!-- FORGOT -->
+        <form id="forgotForm" class="auth-form">
+
+            <div class="form-group">
+                <label>Mobile / Username</label>
+                <input id="forgotUser" required>
+            </div>
+
+            <button
+                type="button"
+                class="btn btn-warning btn-block"
+                onclick="sendForgotOtp()">
+                📱 Send OTP
+            </button>
+
+            <div id="forgotOtpBox" class="hidden">
+
+                <div class="form-group" style="margin-top:15px">
+                    <label>OTP</label>
+                    <input id="forgotOtp">
+                </div>
+
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input
+                        id="forgotNewPassword"
+                        type="password">
+                </div>
+
+                <button
+                    type="button"
+                    class="btn btn-success btn-block"
+                    onclick="resetForgotPassword()">
+                    🔑 Reset Password
+                </button>
+
+            </div>
+
+            <div class="auth-links">
+                <button type="button" onclick="showAuth('login')">
+                    ← Back to Login
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- ========================================================= -->
+<!-- MAIN APPLICATION -->
+<!-- ========================================================= -->
+
+<div id="app" class="hidden">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+            <h2>💊 Pharmacy</h2>
+            <small>Management System</small>
+        </div>
+
+        <div class="nav-menu">
+
+            <div class="nav-title">Main</div>
+
+            <button
+                class="nav-item active"
+                data-page="dashboard"
+                onclick="openPage('dashboard')">
+                <span>📊</span> Dashboard
+            </button>
+
+            <button
+                class="nav-item"
+                data-page="sales"
+                onclick="openPage('sales')">
+                <span>💰</span> Pharmacy Sale
+            </button>
+
+            <button
+                class="nav-item"
+                data-page="returns"
+                onclick="openPage('returns')">
+                <span>↩️</span> Sales Return
+            </button>
+
+            <div class="nav-title">Inventory</div>
+
+            <button
+                class="nav-item"
+                data-page="medicines"
+                onclick="openPage('medicines')">
+                <span>💊</span> Medicine Master
+            </button>
+
+            <button
+                class="nav-item"
+                data-page="purchase"
+                onclick="openPage('purchase')">
+                <span>📦</span> Purchase
+            </button>
+
+            <button
+                class="nav-item"
+                data-page="store"
+                onclick="openPage('store')">
+                <span>🛒</span> General Store
+            </button>
+
+            <div class="nav-title">Master</div>
+
+            <button
+                class="nav-item"
+                data-page="patients"
+                onclick="openPage('patients')">
+                <span>👨‍⚕️</span> Patients
+            </button>
+
+            <button
+                class="nav-item"
+                data-page="suppliers"
+                onclick="openPage('suppliers')">
+                <span>🚚</span> Suppliers
+            </button>
+
+            <div class="nav-title">Reports</div>
+
+            <button
+                class="nav-item"
+                data-page="reports"
+                onclick="openPage('reports')">
+                <span>📈</span> Reports
+            </button>
+
+            <div class="nav-title">System</div>
+
+            <button
+                class="nav-item"
+                data-page="administration"
+                onclick="openPage('administration')">
+                <span>⚙️</span> Administration
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="logout()">
+                <span>🚪</span> Logout
+            </button>
+
+        </div>
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+                <button
+                    class="menu-toggle"
+                    onclick="toggleSidebar()">
+                    ☰
+                </button>
+
+                <h2 id="topTitle">Dashboard</h2>
+            </div>
+
+            <div class="user-box">
+
+                <div class="user-avatar" id="userAvatar">
+                    U
+                </div>
+
+                <div>
+                    <strong id="topUserName">
+                        User
+                    </strong>
+
+                    <small
+                        id="topUserRole"
+                        style="display:block;color:#6b7280">
+                        Pharmacist
+                    </small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="content">
+
+            <!-- ================================================= -->
+            <!-- DASHBOARD -->
+            <!-- ================================================= -->
+
+            <div id="page-dashboard" class="page active">
+
+                <div class="page-header">
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p>आज के Pharmacy Management का सारांश</p>
+                    </div>
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="loadDashboard()">
+                        🔄 Refresh
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <p>Total Medicines</p>
+                                <h3 id="dashMedicines">0</h3>
+                            </div>
+                            <div class="stat-icon">💊</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <p>Today's Sales</p>
+                                <h3 id="dashSales">₹0</h3>
+                            </div>
+                            <div class="stat-icon">💰</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <p>Low Stock</p>
+                                <h3 id="dashLowStock">0</h3>
+                            </div>
+                            <div class="stat-icon">⚠️</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <p>Today's Returns</p>
+                                <h3 id="dashReturns">₹0</h3>
+                            </div>
+                            <div class="stat-icon">↩️</div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="grid-2">
+
+                    <div class="card">
+
+                        <div class="card-title">
+                            <h2>⚠️ Low Stock Medicines</h2>
+
+                            <button
+                                class="btn btn-light"
+                                onclick="openPage('medicines')">
+                                View All
+                            </button>
+                        </div>
+
+                        <div
+                            id="dashboardLowStock"
+                            class="table-wrap">
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-title">
+                            <h2>⏰ Expiry Medicines</h2>
+                        </div>
+
+                        <div
+                            id="dashboardExpiry"
+                            class="table-wrap">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-title">
+                        <h2>🧾 Recent Sales</h2>
+
+                        <button
+                            class="btn btn-light"
+                            onclick="openPage('sales')">
+                            New Sale
+                        </button>
+                    </div>
+
+                    <div
+                        id="dashboardRecentSales"
+                        class="table-wrap">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- SALES -->
+            <!-- ================================================= -->
+
+            <div id="page-sales" class="page">
+
+                        <div class="page-header">
+
+                    <div>
+                        <h1>💰 Pharmacy Sale</h1>
+                        <p>Marg-style fast billing और stock deduction</p>
+                    </div>
+
+                    <div class="header-actions">
+                        <button class="btn btn-light" onclick="clearSale()">🗑️ Clear Bill</button>
+                        <button class="btn btn-primary" onclick="saveSale()">💾 Save & Print Bill</button>
+                    </div>
+
+                </div>
+
+
+                <div class="sale-layout">
+
+                    <div>
+
+                        <div class="card">
+
+                            <div class="form-grid-4 sale-customer-grid">
+
+                                <div class="form-group">
+                                    <label>Bill No.</label>
+                                    <input id="saleInvoice" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Customer</label>
+                                    <input id="saleCustomerName" placeholder="Customer name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Mobile</label>
+                                    <input id="saleCustomerMobile" inputmode="tel" placeholder="Mobile">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Doctor</label>
+                                    <input id="saleDoctor" placeholder="Doctor name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Patient</label>
+                                    <select id="salePatient">
+                                        <option value="">Walk-in Customer</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-title">
+                                <h2>Add Medicine</h2>
+                            </div>
+
+                            <div class="medicine-search-box">
+                                <label style="font-size:12px;font-weight:700">
+                                    Search Medicine
+                                </label>
+
+                                <div class="sale-search-row">
+                                    <input
+                                        id="saleMedicineSearch"
+                                        autocomplete="off"
+                                        placeholder="Medicine name, salt, batch या barcode खोजें...">
+                                    <input
+                                        id="saleBarcode"
+                                        inputmode="numeric"
+                                        autocomplete="off"
+                                        placeholder="Barcode scan / enter">
+                                </div>
+
+                                <div
+                                    id="saleMedicineSuggestions"
+                                    class="medicine-suggestions hidden">
+                                </div>
+                            </div>
+
+                            <input id="saleMedicine" type="hidden">
+
+                            <div class="selected-medicine-details">
+                                <div>
+                                    <label style="font-size:11px">Name</label>
+                                    <input id="saleMedicineName" readonly placeholder="-">
+                                </div>
+                                <div>
+                                    <label style="font-size:11px">Batch</label>
+                                    <input id="saleBatch" readonly placeholder="-">
+                                </div>
+                                <div>
+                                    <label style="font-size:11px">Expiry</label>
+                                    <input id="saleExpiry" readonly placeholder="-">
+                                </div>
+                                <div>
+                                    <label style="font-size:11px">Stock</label>
+                                    <input id="saleStock" readonly placeholder="-">
+                                </div>
+                                <div>
+                                    <label style="font-size:11px">MRP</label>
+                                    <input id="saleMRP" readonly placeholder="-">
+                                </div>
+                                <div>
+                                    <label style="font-size:11px">Sale Rate</label>
+                                    <input id="saleRate" type="number" step="0.01" readonly placeholder="-">
+                                </div>
+                                <div>
+                                    <label style="font-size:11px">GST %</label>
+                                    <input id="saleGST" type="number" readonly placeholder="-">
+                                </div>
+                            </div>
+
+                            <div class="sale-product-row">
+                                <div>
+                                    <label style="font-size:12px">Quantity</label>
+                                    <input id="saleQty" type="number" min="1" value="1">
+                                </div>
+
+                                <button
+                                    class="btn btn-success"
+                                    onclick="addSaleItem()">
+                                    + Add to Bill
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-title">
+                                <h2>Sale Items</h2>
+                                <span
+                                    id="saleItemCount"
+                                    class="badge badge-info">
+                                    0 Items
+                                </span>
+                            </div>
+
+                            <div class="table-wrap">
+
+                                <table class="sale-items-table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Medicine</th>
+                                            <th>Batch</th>
+                                            <th>Stock</th>
+                                            <th>Qty</th>
+                                            <th>Rate</th>
+                                            <th>GST</th>
+                                            <th>Total</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="saleItemsBody">
+                                        <tr>
+                                            <td colspan="9"
+                                                style="text-align:center">
+                                                No medicine added
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="card">
+
+                            <div class="card-title">
+                                <h2>🧾 Bill Summary</h2>
+                            </div>
+
+                            <div class="sale-summary">
+
+                                <div class="summary-row">
+                                    <span>Subtotal</span>
+                                    <strong id="saleSubtotal">
+                                        ₹0.00
+                                    </strong>
+                                </div>
+
+                                <div class="summary-row">
+                                    <span>GST</span>
+                                    <strong id="saleGSTAmount">
+                                        ₹0.00
+                                    </strong>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Discount</label>
+
+                                    <input
+                                        id="saleDiscount"
+                                        type="number"
+                                        min="0"
+                                        value="0"
+                                        oninput="calculateSaleTotal()">
+                                </div>
+
+                                <div class="summary-row total">
+                                    <span>GRAND TOTAL</span>
+                                    <strong id="saleGrandTotal">₹0.00</strong>
+                                </div>
+
+                            </div>
+
+                            <div class="payment-methods">
+                                <strong>Payment:</strong>
+                                <label><input type="radio" name="paymentMethod" value="Cash" checked> Cash</label>
+                                <label><input type="radio" name="paymentMethod" value="UPI"> UPI</label>
+                                <label><input type="radio" name="paymentMethod" value="Card"> Card</label>
+                                <label><input type="radio" name="paymentMethod" value="Credit"> Credit</label>
+                            </div>
+
+                            <button class="btn btn-success btn-block" style="margin-top:15px" onclick="saveSale()">
+                                🖨️ SAVE & PRINT BILL
+                            </button>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-title">
+                                <h2>Recent Bills</h2>
+                            </div>
+
+                            <div id="recentSalesMini">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- RETURNS -->
+            <!-- ================================================= -->
+
+            <div id="page-returns" class="page">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>↩️ Sales Return</h1>
+                        <p>Original bill से medicine return करें</p>
+                    </div>
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="loadReturnHistory()">
+                        🔄 Return History
+                    </button>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="inline">
+
+                        <div class="form-group" style="min-width:260px">
+                            <label>Bill / Invoice No.</label>
+
+                            <input
+                                id="returnInvoice"
+                                placeholder="जैसे INV-20260909-0001">
+                        </div>
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="loadReturnBill()">
+                            🔎 Load Bill
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div id="returnBillArea" class="hidden">
+
+                    <div class="card">
+
+                        <div class="form-grid-3">
+
+                            <div>
+                                <small>Invoice</small>
+                                <h3 id="returnBillNo">-</h3>
+                            </div>
+
+                            <div>
+                                <small>Customer</small>
+                                <h3 id="returnCustomer">-</h3>
+                            </div>
+
+                            <div>
+                                <small>Bill Total</small>
+                                <h3 id="returnBillTotal">₹0</h3>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="table-wrap">
+
+                            <table>
+
+                                <thead>
+                                    <tr>
+                                        <th>Medicine</th>
+                                        <th>Batch</th>
+                                        <th>Sold Qty</th>
+                                        <th>Already Returned</th>
+                                        <th>Returnable</th>
+                                        <th>Return Qty</th>
+                                        <th>Return Amount</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="returnItemsBody">
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="form-grid-3">
+
+                            <div class="form-group">
+                                <label>Refund Method</label>
+
+                                <select id="refundMethod">
+                                    <option>Cash</option>
+                                    <option>UPI</option>
+                                    <option>Card</option>
+                                    <option>Credit Adjustment</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Total Return</label>
+
+                                <input
+                                    id="returnTotal"
+                                    readonly
+                                    value="₹0.00">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Common Reason</label>
+
+                                <input
+                                    id="returnCommonReason"
+                                    placeholder="Customer Return">
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="btn btn-danger"
+                            onclick="processSaleReturn()">
+                            ↩️ Process Return
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-title">
+                        <h2>Return History</h2>
+                    </div>
+
+                    <div
+                        id="returnHistory"
+                        class="table-wrap">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- MEDICINES -->
+            <!-- ================================================= -->
+
+            <div id="page-medicines" class="page">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>💊 Medicine Master</h1>
+                        <p>Medicine, batch, rate, GST और stock management</p>
+                    </div>
+
+                    <div class="header-actions">
+
+                        <button
+                            class="btn btn-success"
+                            onclick="openMedicineModal()">
+                            + Add Medicine
+                        </button>
+
+                        <button
+                            class="btn btn-light"
+                            onclick="loadMedicines()">
+                            🔄 Refresh
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="inline">
+
+                        <div class="input-search"
+                             style="min-width:280px">
+
+                            <span>🔎</span>
+
+                            <input
+                                id="medicineSearch"
+                                placeholder="Medicine search..."
+                                oninput="filterMedicines()">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div
+                        id="medicineTable"
+                        class="table-wrap">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- GENERAL STORE -->
+            <!-- ================================================= -->
+
+            <div id="page-store" class="page">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>🛒 General Store</h1>
+                        <p>Non-medicine items management</p>
+                    </div>
+
+                    <div class="header-actions">
+
+                        <button
+                            class="btn btn-success"
+                            onclick="openStoreModal()">
+                            + Add Item
+                        </button>
+
+                        <button
+                            class="btn btn-light"
+                            onclick="loadStoreItems()">
+                            🔄 Refresh
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="input-search"
+                         style="max-width:350px">
+
+                        <span>🔎</span>
+
+                        <input
+                            id="storeSearch"
+                            placeholder="Item / Barcode search..."
+                            oninput="filterStoreItems()">
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div
+                        id="storeTable"
+                        class="table-wrap">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- PURCHASE -->
+            <!-- ================================================= -->
+
+            <div id="page-purchase" class="page">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>📦 Purchase</h1>
+                        <p>Supplier invoice और stock entry</p>
+                    </div>
+
+                    <button
+                        class="btn btn-success"
+                        onclick="savePurchase()">
+                        💾 Save Purchase
+                    </button>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="form-grid-3">
+
+                        <div class="form-group">
+                            <label>Supplier</label>
+
+                            <select id="purchaseSupplier">
+                                <option value="">
+                                    Select Supplier
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Invoice No.</label>
+
+                            <input
+                                id="purchaseInvoice"
+                                placeholder="Supplier Invoice">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Invoice Date</label>
+
+                            <input
+                                id="purchaseDate"
+                                type="date">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="sale-product-row">
+
+                        <div>
+                            <label style="font-size:12px">
+                                Medicine
+                            </label>
+
+                            <select id="purchaseMedicine">
+                                <option value="">
+                                    Select Medicine
+                                </option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label style="font-size:12px">
+                                Qty
+                            </label>
+
+                            <input
+                                id="purchaseQty"
+                                type="number"
+                                min="1"
+                                value="1">
+                        </div>
+
+                        <div>
+                            <label style="font-size:12px">
+                                Purchase Rate
+                            </label>
+
+                            <input
+                                id="purchaseRate"
+                                type="number"
+                                step=".01">
+                        </div>
+
+                        <div>
+                            <label style="font-size:12px">
+                                GST %
+                            </label>
+
+                            <input
+                                id="purchaseGST"
+                                type="number"
+                                value="0">
+                        </div>
+
+                        <button
+                            class="btn btn-success"
+                            onclick="addPurchaseItem()">
+                            + Add
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Medicine</th>
+                                    <th>Batch</th>
+                                    <th>Expiry</th>
+                                    <th>Qty</th>
+                                    <th>Rate</th>
+                                    <th>GST</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="purchaseItemsBody">
+                                <tr>
+                                    <td colspan="8"
+                                        style="text-align:center">
+                                        No items
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="form-grid-3">
+
+                        <div>
+                            <strong>Subtotal</strong>
+                            <h2 id="purchaseSubtotal">₹0</h2>
+                        </div>
+
+                        <div>
+                            <strong>GST</strong>
+                            <h2 id="purchaseGSTAmount">₹0</h2>
+                        </div>
+
+                        <div>
+                            <strong>Grand Total</strong>
+                            <h2 id="purchaseGrandTotal">₹0</h2>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- PATIENTS -->
+            <!-- ================================================= -->
+
+            <div id="page-patients" class="page">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>👨‍⚕️ Patients</h1>
+                        <p>Patient / customer database</p>
+                    </div>
+
+                    <button
+                        class="btn btn-success"
+                        onclick="openPatientModal()">
+                        + Add Patient
+                    </button>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div
+                        id="patientsTable"
+                        class="table-wrap">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- SUPPLIERS -->
+            <!-- ================================================= -->
+
+            <div id="page-suppliers" class="page">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>🚚 Suppliers</h1>
+                        <p>Supplier master management</p>
+                    </div>
+
+                    <button
+                        class="btn btn-success"
+                        onclick="openSupplierModal()">
+                        + Add Supplier
+                    </button>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div
+                        id="suppliersTable"
+                        class="table-wrap">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- REPORTS -->
+            <!-- ================================================= -->
+
+            <div id="page-reports" class="page">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>📈 Reports</h1>
+                        <p>Sales, Purchase, Stock और Return Reports</p>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="form-grid-3">
+
+                        <div class="form-group">
+                            <label>From Date</label>
+                            <input
+                                id="reportFrom"
+                                type="date">
+                        </div>
+
+                        <div class="form-group">
+                            <label>To Date</label>
+                            <input
+                                id="reportTo"
+                                type="date">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Report</label>
+
+                            <select id="reportType">
+
+                                <option value="sales">
+                                    Sales Report
+                                </option>
+
+                                <option value="purchase">
+                                    Purchase Report
+                                </option>
+
+                                <option value="stock">
+                                    Stock Report
+                                </option>
+
+                                <option value="returns">
+                                    Sales Return Report
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="runReport()">
+                        📊 Generate Report
+                    </button>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div
+                        id="reportResult"
+                        class="table-wrap">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- ADMINISTRATION -->
+            <!-- ================================================= -->
+
+            <div id="page-administration" class="page">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>⚙️ Administration</h1>
+                        <p>System और login information</p>
+                    </div>
+
+                </div>
+
+
+                <div class="grid-2">
+
+                    <div class="card">
+
+                        <div class="card-title">
+                            <h2>👤 Current User</h2>
+                        </div>
+
+                        <div id="adminUserInfo">
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-title">
+                            <h2>🖥️ System</h2>
+                        </div>
+
+                        <p>
+                            <strong>Application:</strong>
+                            Pharmacy Management System
+                        </p>
+
+                        <p style="margin-top:8px">
+                            <strong>Backend:</strong>
+                            Node.js + Express
+                        </p>
+
+                        <p style="margin-top:8px">
+                            <strong>Database:</strong>
+                            PostgreSQL
+                        </p>
+
+                        <p style="margin-top:8px">
+                            <strong>API:</strong>
+                            <span id="apiDisplay"></span>
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- MEDICINE MODAL -->
+<!-- ========================================================= -->
+
+<div id="medicineModal" class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2 id="medicineModalTitle">
+                Add Medicine
+            </h2>
+
+            <button
+                class="close-modal"
+                onclick="closeModal('medicineModal')">
+                ✕
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <input
+                id="medicineEditId"
+                type="hidden">
+
+            <div class="form-grid-2">
+
+                <div class="form-group">
+                    <label>Medicine Name *</label>
+                    <input id="mName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Generic Name</label>
+                    <input id="mGeneric">
+                </div>
+
+                <div class="form-group">
+                    <label>Company</label>
+                    <input id="mCompany">
+                </div>
+
+                <div class="form-group">
+                    <label>Batch No.</label>
+                    <input id="mBatch">
+                </div>
+
+                <div class="form-group">
+                    <label>Expiry Date</label>
+                    <input id="mExpiry" type="date">
+                </div>
+
+                <div class="form-group">
+                    <label>Purchase Rate</label>
+                    <input id="mPurchaseRate" type="number" step=".01">
+                </div>
+
+                <div class="form-group">
+                    <label>Sale Rate</label>
+                    <input id="mSaleRate" type="number" step=".01">
+                </div>
+
+                <div class="form-group">
+                    <label>MRP</label>
+                    <input id="mMrp" type="number" step=".01">
+                </div>
+
+                <div class="form-group">
+                    <label>GST %</label>
+                    <input
+                        id="mGST"
+                        type="number"
+                        step=".01"
+                        value="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Current Stock</label>
+                    <input
+                        id="mStock"
+                        type="number"
+                        min="0"
+                        value="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Minimum Stock</label>
+                    <input
+                        id="mMinStock"
+                        type="number"
+                        min="0"
+                        value="10">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-light"
+                onclick="closeModal('medicineModal')">
+                Cancel
+            </button>
+
+            <button
+                class="btn btn-success"
+                onclick="saveMedicine()">
+                💾 Save
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- STORE MODAL -->
+<!-- ========================================================= -->
+
+<div id="storeModal" class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>General Store Item</h2>
+
+            <button
+                class="close-modal"
+                onclick="closeModal('storeModal')">
+                ✕
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <input id="storeEditId" type="hidden">
+
+            <div class="form-grid-2">
+
+                <div class="form-group">
+                    <label>Item Name *</label>
+                    <input id="sName">
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <input id="sCategory">
+                </div>
+
+                <div class="form-group">
+                    <label>Company</label>
+                    <input id="sCompany">
+                </div>
+
+                <div class="form-group">
+                    <label>Barcode</label>
+                    <input id="sBarcode">
+                </div>
+
+                <div class="form-group">
+                    <label>Unit</label>
+
+                    <select id="sUnit">
+                        <option>Piece</option>
+                        <option>Pack</option>
+                        <option>Box</option>
+                        <option>Bottle</option>
+                        <option>Kg</option>
+                        <option>Gram</option>
+                        <option>Litre</option>
+                        <option>Ml</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <label>Purchase Rate</label>
+                    <input
+                        id="sPurchaseRate"
+                        type="number"
+                        step=".01">
+                </div>
+
+                <div class="form-group">
+                    <label>Sale Rate</label>
+                    <input
+                        id="sSaleRate"
+                        type="number"
+                        step=".01">
+                </div>
+
+                <div class="form-group">
+                    <label>MRP</label>
+                    <input
+                        id="sMrp"
+                        type="number"
+                        step=".01">
+                </div>
+
+                <div class="form-group">
+                    <label>GST %</label>
+                    <input
+                        id="sGST"
+                        type="number"
+                        step=".01"
+                        value="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Current Stock</label>
+                    <input
+                        id="sStock"
+                        type="number"
+                        step=".001"
+                        value="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Minimum Stock</label>
+                    <input
+                        id="sMinStock"
+                        type="number"
+                        step=".001"
+                        value="5">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-light"
+                onclick="closeModal('storeModal')">
+                Cancel
+            </button>
+
+            <button
+                class="btn btn-success"
+                onclick="saveStoreItem()">
+                💾 Save
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- PATIENT MODAL -->
+<!-- ========================================================= -->
+
+<div id="patientModal" class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>Patient</h2>
+
+            <button
+                class="close-modal"
+                onclick="closeModal('patientModal')">
+                ✕
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <input id="patientEditId" type="hidden">
+
+            <div class="form-grid-2">
+
+                <div class="form-group">
+                    <label>Patient Name *</label>
+                    <input id="pName">
+                </div>
+
+                <div class="form-group">
+                    <label>Mobile</label>
+                    <input id="pMobile">
+                </div>
+
+                <div class="form-group">
+                    <label>Age</label>
+                    <input
+                        id="pAge"
+                        type="number">
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label>
+
+                    <select id="pGender">
+                        <option value="">Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <label>Doctor Name</label>
+                    <input id="pDoctor">
+                </div>
+
+                <div class="form-group">
+                    <label>Address</label>
+                    <input id="pAddress">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-light"
+                onclick="closeModal('patientModal')">
+                Cancel
+            </button>
+
+            <button
+                class="btn btn-success"
+                onclick="savePatient()">
+                💾 Save
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- SUPPLIER MODAL -->
+<!-- ========================================================= -->
+
+<div id="supplierModal" class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>Supplier</h2>
+
+            <button
+                class="close-modal"
+                onclick="closeModal('supplierModal')">
+                ✕
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <input id="supplierEditId" type="hidden">
+
+            <div class="form-grid-2">
+
+                <div class="form-group">
+                    <label>Supplier Name *</label>
+                    <input id="supName">
+                </div>
+
+                <div class="form-group">
+                    <label>Contact Person</label>
+                    <input id="supContact">
+                </div>
+
+                <div class="form-group">
+                    <label>Mobile</label>
+                    <input id="supMobile">
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input id="supEmail">
+                </div>
+
+                <div class="form-group">
+                    <label>GST Number</label>
+                    <input id="supGST">
+                </div>
+
+                <div class="form-group">
+                    <label>Address</label>
+                    <input id="supAddress">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-light"
+                onclick="closeModal('supplierModal')">
+                Cancel
+            </button>
+
+            <button
+                class="btn btn-success"
+                onclick="saveSupplier()">
+                💾 Save
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- PRINT AREA -->
+<!-- ========================================================= -->
+
+<div id="printArea"></div>
+
+<div id="toastContainer"></div>
+
+
+<script>
+/* ============================================================
+   CONFIGURATION
+============================================================ */
+
+const API_BASE_URL =
+    String(window.API_BASE_URL || "http://localhost:3000")
+        .trim()
+        .replace(/\/$/,"");
+
+let currentUser = null;
+
+let medicines = [];
+let storeItems = [];
+let patients = [];
+let suppliers = [];
+
+let saleItems = [];
+let purchaseItems = [];
+
+let currentReturnBill = null;
+
+let editingMedicineId = null;
+let editingStoreId = null;
+let editingPatientId = null;
+let editingSupplierId = null;
+
+
+/* ============================================================
+   BASIC HELPERS
+============================================================ */
+
+function $(id){
+    return document.getElementById(id);
+}
+
+function money(value){
+    return "₹" + Number(value || 0).toLocaleString(
+        "en-IN",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+}
+
+function escapeHtml(value){
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+function today(){
+    return new Date().toISOString().slice(0,10);
+}
+
+function showToast(message,type=""){
+    const box = document.createElement("div");
+
+    box.className =
+        "toast " + type;
+
+    box.textContent = message;
+
+    $("toastContainer").appendChild(box);
+
+    setTimeout(()=>{
+        box.remove();
+    },4000);
+}
+
+function setAuthMessage(message,type="error"){
+    const el = $("authMessage");
+
+    el.textContent = message;
+
+    el.className =
+        "auth-message " + type;
+}
+
+function clearAuthMessage(){
+    $("authMessage").className =
+        "auth-message";
+}
+
+function normalizeList(data,keys=[]){
+
+    if(Array.isArray(data)){
+        return data;
+    }
+
+    for(const key of keys){
+
+        if(Array.isArray(data?.[key])){
+            return data[key];
+        }
+    }
+
+    if(Array.isArray(data?.data)){
+        return data.data;
+    }
+
+    return [];
+}
+
+
+/* ============================================================
+   API
+============================================================ */
+
+async function api(
+    path,
+    options={}
+){
+
+    const config = {
+        credentials:"include",
+        ...options,
+        headers:{
+            ...(options.body ? {
+                "Content-Type":"application/json"
+            } : {}),
+            ...(options.headers || {})
+        }
+    };
+
+    const response =
+        await fetch(
+            API_BASE_URL + path,
+            config
+        );
+
+    let data = {};
+
+    try{
+        data = await response.json();
+    }catch{
+        data = {};
+    }
+
+    if(!response.ok){
+
+        const message =
+            data.message ||
+            data.error ||
+            `HTTP ${response.status}`;
+
+        throw new Error(message);
+    }
+
+    return data;
+}
+
+
+/* ============================================================
+   AUTH
+============================================================ */
+
+function showAuth(type){
+
+    clearAuthMessage();
+
+    document
+        .querySelectorAll(".auth-form")
+        .forEach(x =>
+            x.classList.remove("active")
+        );
+
+    if(type==="login"){
+        $("loginForm").classList.add("active");
+    }
+
+    if(type==="signup"){
+        $("signupForm").classList.add("active");
+    }
+
+    if(type==="forgot"){
+        $("forgotForm").classList.add("active");
+    }
+}
+
+
+$("loginForm").addEventListener(
+    "submit",
+    async function(e){
+
+        e.preventDefault();
+
+        try{
+
+            const username =
+                $("loginUsername").value.trim();
+
+            const password =
+                $("loginPassword").value;
+
+            const data =
+                await api(
+                    "/api/auth/login",
+                    {
+                        method:"POST",
+                        body:JSON.stringify({
+                            username,
+                            password
+                        })
+                    }
+                );
+
+            currentUser =
+                data.user || data;
+
+            await startApplication();
+
+        }catch(error){
+
+            setAuthMessage(
+                error.message,
+                "error"
+            );
+        }
+    }
+);
+
+
+$("signupForm").addEventListener(
+    "submit",
+    async function(e){
+
+        e.preventDefault();
+
+        try{
+
+            const data =
+                await api(
+                    "/api/auth/signup",
+                    {
+                        method:"POST",
+                        body:JSON.stringify({
+                            fullName:$("signupName").value.trim(),
+                            username:$("signupUsername").value.trim(),
+                            mobile:$("signupMobile").value.trim(),
+                            password:$("signupPassword").value
+                        })
+                    }
+                );
+
+            setAuthMessage(
+                data.message ||
+                "Account created successfully.",
+                "success"
+            );
+
+            showAuth("login");
+
+        }catch(error){
+
+            setAuthMessage(
+                error.message,
+                "error"
+            );
+        }
+    }
+);
+
+
+async function sendForgotOtp(){
+
+    try{
+
+        const value =
+            $("forgotUser").value.trim();
+
+        if(!value){
+            throw new Error(
+                "Mobile या Username डालें."
+            );
+        }
+
+        const data =
+            await api(
+                "/api/auth/forgot-password/send-otp",
+                {
+                    method:"POST",
+                    body:JSON.stringify({
+                        usernameOrMobile:value
+                    })
+                }
+            );
+
+        $("forgotOtpBox")
+            .classList
+            .remove("hidden");
+
+        showToast(
+            data.message ||
+            "OTP sent successfully",
+            "success"
+        );
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+async function resetForgotPassword(){
+
+    try{
+
+        const data =
+            await api(
+                "/api/auth/forgot-password/reset",
+                {
+                    method:"POST",
+                    body:JSON.stringify({
+                        usernameOrMobile:
+                            $("forgotUser").value.trim(),
+
+                        otp:
+                            $("forgotOtp").value.trim(),
+
+                        newPassword:
+                            $("forgotNewPassword").value
+                    })
+                }
+            );
+
+        showToast(
+            data.message ||
+            "Password reset successfully",
+            "success"
+        );
+
+        showAuth("login");
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+async function checkLogin(){
+
+    try{
+
+        const data =
+            await api("/api/auth/me");
+
+        currentUser =
+            data.user || data;
+
+        await startApplication();
+
+    }catch{
+
+        $("authScreen")
+            .classList
+            .remove("hidden");
+
+        $("app")
+            .classList
+            .add("hidden");
+    }
+}
+
+
+async function startApplication(){
+
+    $("authScreen")
+        .classList
+        .add("hidden");
+
+    $("app")
+        .classList
+        .remove("hidden");
+
+    updateUserUI();
+
+    $("apiDisplay").textContent =
+        API_BASE_URL;
+
+    $("purchaseDate").value =
+        today();
+
+    setDefaultReportDates();
+
+    await loadInitialData();
+
+    openPage("dashboard");
+}
+
+
+function updateUserUI(){
+
+    const name =
+        currentUser?.full_name ||
+        currentUser?.fullName ||
+        currentUser?.username ||
+        "User";
+
+    const role =
+        currentUser?.role ||
+        "pharmacist";
+
+    $("topUserName").textContent =
+        name;
+
+    $("topUserRole").textContent =
+        role;
+
+    $("userAvatar").textContent =
+        name
+            .charAt(0)
+            .toUpperCase();
+
+    $("adminUserInfo").innerHTML = `
+
+        <p>
+            <strong>Name:</strong>
+            ${escapeHtml(name)}
+        </p>
+
+        <p style="margin-top:10px">
+            <strong>Username:</strong>
+            ${escapeHtml(
+                currentUser?.username || "-"
+            )}
+        </p>
+
+        <p style="margin-top:10px">
+            <strong>Mobile:</strong>
+            ${escapeHtml(
+                currentUser?.mobile || "-"
+            )}
+        </p>
+
+        <p style="margin-top:10px">
+            <strong>Role:</strong>
+            ${escapeHtml(role)}
+        </p>
+
+    `;
+}
+
+
+async function logout(){
+
+    try{
+        await api(
+            "/api/auth/logout",
+            {
+                method:"POST"
+            }
+        );
+    }catch{}
+
+    currentUser = null;
+
+    $("app").classList.add("hidden");
+    $("authScreen").classList.remove("hidden");
+
+    showAuth("login");
+
+    showToast(
+        "Logout successful",
+        "success"
+    );
+}
+
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+
+const pageTitles = {
+
+    dashboard:"Dashboard",
+    sales:"Pharmacy Sale",
+    returns:"Sales Return",
+    medicines:"Medicine Master",
+    store:"General Store",
+    purchase:"Purchase",
+    patients:"Patients",
+    suppliers:"Suppliers",
+    reports:"Reports",
+    administration:"Administration"
+
+};
+
+
+function openPage(page){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(el =>
+            el.classList.remove("active")
+        );
+
+    const target =
+        $("page-" + page);
+
+    if(target){
+        target.classList.add("active");
+    }
+
+    document
+        .querySelectorAll(".nav-item")
+        .forEach(el =>
+            el.classList.remove("active")
+        );
+
+    const nav =
+        document.querySelector(
+            `.nav-item[data-page="${page}"]`
+        );
+
+    if(nav){
+        nav.classList.add("active");
+    }
+
+    $("topTitle").textContent =
+        pageTitles[page] || page;
+
+    $("sidebar").classList.remove("open");
+
+    if(page==="dashboard"){
+        loadDashboard();
+    }
+
+    if(page==="sales"){
+        loadSalesPage();
+    }
+
+    if(page==="returns"){
+        loadReturnHistory();
+    }
+
+    if(page==="medicines"){
+        loadMedicines();
+    }
+
+    if(page==="store"){
+        loadStoreItems();
+    }
+
+    if(page==="purchase"){
+        loadPurchasePage();
+    }
+
+    if(page==="patients"){
+        loadPatients();
+    }
+
+    if(page==="suppliers"){
+        loadSuppliers();
+    }
+}
+
+
+function toggleSidebar(){
+
+    $("sidebar")
+        .classList
+        .toggle("open");
+}
+
+
+/* ============================================================
+   INITIAL DATA
+============================================================ */
+
+async function loadInitialData(){
+
+    await Promise.allSettled([
+        loadMedicines(),
+        loadPatients(),
+        loadSuppliers(),
+        loadStoreItems()
+    ]);
+
+    fillSaleMedicineSelect();
+    fillPurchaseMedicineSelect();
+    fillPatientSelect();
+    fillSupplierSelect();
+}
+
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+
+async function loadDashboard(){
+
+    try{
+
+        const data =
+            await api("/api/dashboard");
+
+        const medicinesList =
+            normalizeList(
+                data,
+                ["medicines","items"]
+            );
+
+        const low =
+            normalizeList(
+                data,
+                ["lowStock","low_stock"]
+            );
+
+        const expiry =
+            normalizeList(
+                data,
+                ["expiry","expiringMedicines"]
+            );
+
+        const sales =
+            normalizeList(
+                data,
+                ["recentSales","sales"]
+            );
+
+        $("dashMedicines").textContent =
+            data.totalMedicines ??
+            data.total_medicines ??
+            medicines.length;
+
+        $("dashSales").textContent =
+            money(
+                data.todaySales ??
+                data.today_sales ??
+                data.salesToday ??
+                0
+            );
+
+        $("dashLowStock").textContent =
+            data.lowStockCount ??
+            data.low_stock_count ??
+            low.length;
+
+        $("dashReturns").textContent =
+            money(
+                data.todayReturns ??
+                data.today_returns ??
+                0
+            );
+
+        renderDashboardLowStock(
+            low.length ? low : getLocalLowStock()
+        );
+
+        renderDashboardExpiry(
+            expiry.length ? expiry : getLocalExpiry()
+        );
+
+        renderRecentSales(
+            sales
+        );
+
+    }catch(error){
+
+        renderDashboardLowStock(
+            getLocalLowStock()
+        );
+
+        renderDashboardExpiry(
+            getLocalExpiry()
+        );
+
+        $("dashboardRecentSales").innerHTML =
+            `<p style="color:#6b7280">
+                Dashboard API unavailable.
+            </p>`;
+    }
+}
+
+
+function getLocalLowStock(){
+
+    return medicines.filter(
+        m =>
+            Number(m.current_stock ?? m.currentStock ?? 0)
+            <=
+            Number(m.minimum_stock ?? m.minimumStock ?? 0)
+    );
+}
+
+
+function getLocalExpiry(){
+
+    const now =
+        new Date();
+
+    const max =
+        new Date();
+
+    max.setDate(
+        max.getDate()+90
+    );
+
+    return medicines.filter(m=>{
+
+        const date =
+            m.expiry_date ||
+            m.expiryDate;
+
+        if(!date){
+            return false;
+        }
+
+        const d =
+            new Date(date);
+
+        return d >= now && d <= max;
+    });
+}
+
+
+function renderDashboardLowStock(list){
+
+    if(!list.length){
+
+        $("dashboardLowStock").innerHTML =
+            `<p style="padding:15px;color:#198754">
+                ✅ No low-stock medicine
+            </p>`;
+
+        return;
+    }
+
+    $("dashboardLowStock").innerHTML = `
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Medicine</th>
+                    <th>Stock</th>
+                    <th>Minimum</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                ${list.slice(0,10).map(m=>`
+
+                    <tr>
+
+                        <td>
+                            ${escapeHtml(
+                                m.medicine_name ||
+                                m.medicineName ||
+                                m.item_name ||
+                                m.itemName ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            <span class="badge badge-danger">
+                                ${m.current_stock ??
+                                  m.currentStock ??
+                                  0}
+                            </span>
+                        </td>
+
+                        <td>
+                            ${m.minimum_stock ??
+                              m.minimumStock ??
+                              0}
+                        </td>
+
+                    </tr>
+
+                `).join("")}
+
+            </tbody>
+
+        </table>
+    `;
+}
+
+
+function renderDashboardExpiry(list){
+
+    if(!list.length){
+
+        $("dashboardExpiry").innerHTML =
+            `<p style="padding:15px;color:#198754">
+                ✅ No medicine expiring within 90 days
+            </p>`;
+
+        return;
+    }
+
+    $("dashboardExpiry").innerHTML = `
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Medicine</th>
+                    <th>Expiry</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                ${list.slice(0,10).map(m=>`
+
+                    <tr>
+
+                        <td>
+                            ${escapeHtml(
+                                m.medicine_name ||
+                                m.medicineName ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            <span class="badge badge-warning">
+                                ${escapeHtml(
+                                    m.expiry_date ||
+                                    m.expiryDate ||
+                                    "-"
+                                )}
+                            </span>
+                        </td>
+
+                    </tr>
+
+                `).join("")}
+
+            </tbody>
+
+        </table>
+    `;
+}
+
+
+function renderRecentSales(list){
+
+    if(!list.length){
+
+        $("dashboardRecentSales").innerHTML =
+            `<p style="padding:15px;color:#6b7280">
+                No recent sales
+            </p>`;
+
+        return;
+    }
+
+    $("dashboardRecentSales").innerHTML = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Invoice</th>
+                    <th>Patient</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${list.slice(0,10).map(s=>`
+
+                    <tr>
+
+                        <td>
+                            ${escapeHtml(
+                                s.invoice_no ||
+                                s.invoiceNo ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                s.patient_name ||
+                                s.patientName ||
+                                "Walk-in"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                s.sale_date ||
+                                s.saleDate ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            <strong>
+                                ${money(
+                                    s.grand_total ??
+                                    s.grandTotal ??
+                                    0
+                                )}
+                            </strong>
+                        </td>
+
+                    </tr>
+
+                `).join("")}
+
+            </tbody>
+
+        </table>
+    `;
+}
+
+
+/* ============================================================
+   MEDICINES
+============================================================ */
+
+async function loadMedicines(){
+
+    try{
+
+        const data =
+            await api("/api/medicines");
+
+        medicines =
+            normalizeList(
+                data,
+                ["medicines","items"]
+            );
+
+        renderMedicineTable();
+
+        fillSaleMedicineSelect();
+        fillPurchaseMedicineSelect();
+
+    }catch(error){
+
+        $("medicineTable").innerHTML =
+            `<p class="loading">
+                ${escapeHtml(error.message)}
+            </p>`;
+    }
+}
+
+
+function renderMedicineTable(){
+
+    const search =
+        ($("medicineSearch")?.value || "")
+            .toLowerCase();
+
+    const list =
+        medicines.filter(m=>{
+
+            const text = [
+                m.medicine_name,
+                m.medicineName,
+                m.generic_name,
+                m.genericName,
+                m.company_name,
+                m.companyName,
+                m.batch_no,
+                m.batchNo
+            ]
+            .join(" ")
+            .toLowerCase();
+
+            return text.includes(search);
+        });
+
+    if(!list.length){
+
+        $("medicineTable").innerHTML =
+            `<p class="loading">
+                No medicine found
+            </p>`;
+
+        return;
+    }
+
+    $("medicineTable").innerHTML = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Medicine</th>
+                    <th>Generic</th>
+                    <th>Company</th>
+                    <th>Batch</th>
+                    <th>Expiry</th>
+                    <th>Purchase</th>
+                    <th>Sale</th>
+                    <th>MRP</th>
+                    <th>GST</th>
+                    <th>Stock</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${list.map(m=>{
+
+                    const stock =
+                        Number(
+                            m.current_stock ??
+                            m.currentStock ??
+                            0
+                        );
+
+                    const min =
+                        Number(
+                            m.minimum_stock ??
+                            m.minimumStock ??
+                            0
+                        );
+
+                    return `
+
+                    <tr>
+
+                        <td>${m.id}</td>
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(
+                                    m.medicine_name ||
+                                    m.medicineName ||
+                                    "-"
+                                )}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                m.generic_name ||
+                                m.genericName ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                m.company_name ||
+                                m.companyName ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                m.batch_no ||
+                                m.batchNo ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                m.expiry_date ||
+                                m.expiryDate ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(
+                                m.purchase_rate ??
+                                m.purchaseRate
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(
+                                m.sale_rate ??
+                                m.saleRate
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(m.mrp)}
+                        </td>
+
+                        <td>
+                            ${m.gst_percent ??
+                             m.gstPercent ??
+                             0}%
+                        </td>
+
+                        <td>
+
+                            <span class="badge ${
+                                stock <= min
+                                ? "badge-danger"
+                                : "badge-success"
+                            }">
+
+                                ${stock}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn btn-info"
+                                onclick="editMedicine(${m.id})">
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn btn-danger"
+                                onclick="deleteMedicine(${m.id})">
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+                    `;
+                }).join("")}
+
+            </tbody>
+
+        </table>
+    `;
+}
+
+
+function filterMedicines(){
+    renderMedicineTable();
+}
+
+
+function openMedicineModal(item=null){
+
+    editingMedicineId =
+        item?.id || null;
+
+    $("medicineEditId").value =
+        editingMedicineId || "";
+
+    $("medicineModalTitle").textContent =
+        item ? "Edit Medicine" : "Add Medicine";
+
+    $("mName").value =
+        item?.medicine_name ||
+        item?.medicineName ||
+        "";
+
+    $("mGeneric").value =
+        item?.generic_name ||
+        item?.genericName ||
+        "";
+
+    $("mCompany").value =
+        item?.company_name ||
+        item?.companyName ||
+        "";
+
+    $("mBatch").value =
+        item?.batch_no ||
+        item?.batchNo ||
+        "";
+
+    $("mExpiry").value =
+        String(
+            item?.expiry_date ||
+            item?.expiryDate ||
+            ""
+        ).slice(0,10);
+
+    $("mPurchaseRate").value =
+        item?.purchase_rate ??
+        item?.purchaseRate ??
+        0;
+
+    $("mSaleRate").value =
+        item?.sale_rate ??
+        item?.saleRate ??
+        0;
+
+    $("mMrp").value =
+        item?.mrp ?? 0;
+
+    $("mGST").value =
+        item?.gst_percent ??
+        item?.gstPercent ??
+        0;
+
+    $("mStock").value =
+        item?.current_stock ??
+        item?.currentStock ??
+        0;
+
+    $("mMinStock").value =
+        item?.minimum_stock ??
+        item?.minimumStock ??
+        10;
+
+    $("medicineModal")
+        .classList
+        .add("show");
+}
+
+
+function editMedicine(id){
+
+    const item =
+        medicines.find(
+            m => Number(m.id)===Number(id)
+        );
+
+    if(item){
+        openMedicineModal(item);
+    }
+}
+
+
+async function saveMedicine(){
+
+    try{
+
+        const payload = {
+
+            medicineName:
+                $("mName").value.trim(),
+
+            genericName:
+                $("mGeneric").value.trim(),
+
+            companyName:
+                $("mCompany").value.trim(),
+
+            batchNo:
+                $("mBatch").value.trim(),
+
+            expiryDate:
+                $("mExpiry").value || null,
+
+            purchaseRate:
+                Number($("mPurchaseRate").value || 0),
+
+            saleRate:
+                Number($("mSaleRate").value || 0),
+
+            mrp:
+                Number($("mMrp").value || 0),
+
+            gstPercent:
+                Number($("mGST").value || 0),
+
+            currentStock:
+                Number($("mStock").value || 0),
+
+            minimumStock:
+                Number($("mMinStock").value || 0)
+
+        };
+
+        if(!payload.medicineName){
+            throw new Error(
+                "Medicine Name required."
+            );
+        }
+
+        const path =
+            editingMedicineId
+            ? `/api/medicines/${editingMedicineId}`
+            : "/api/medicines";
+
+        const method =
+            editingMedicineId
+            ? "PATCH"
+            : "POST";
+
+        await api(
+            path,
+            {
+                method,
+                body:JSON.stringify(payload)
+            }
+        );
+
+        closeModal("medicineModal");
+
+        showToast(
+            editingMedicineId
+            ? "Medicine updated"
+            : "Medicine added",
+            "success"
+        );
+
+        editingMedicineId = null;
+
+        await loadMedicines();
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+async function deleteMedicine(id){
+
+    if(!confirm(
+        "क्या आप इस medicine को delete करना चाहते हैं?"
+    )){
+        return;
+    }
+
+    try{
+
+        await api(
+            `/api/medicines/${id}`,
+            {
+                method:"DELETE"
+            }
+        );
+
+        showToast(
+            "Medicine deleted",
+            "success"
+        );
+
+        await loadMedicines();
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* ============================================================
+   SALES
+============================================================ */
+
+function generateInvoiceNo(){
+
+    const d =
+        today().replace(/-/g,"");
+
+    return `INV-${d}-${String(
+        Math.floor(
+            Math.random()*9999
+        )+1
+    ).padStart(4,"0")}`;
+}
+
+
+function loadSalesPage(){
+
+    if(!$("saleInvoice").value){
+        $("saleInvoice").value =
+            generateInvoiceNo();
+    }
+
+    fillSaleMedicineSelect();
+    fillPatientSelect();
+    loadRecentSalesMini();
+}
+
+
+function medicineValue(item, ...keys){
+    for(const key of keys){
+        if(item?.[key] !== undefined && item?.[key] !== null){
+            return item[key];
+        }
+    }
+    return "";
+}
+
+function medicineName(item){
+    return medicineValue(item,"medicine_name","medicineName") || "Medicine";
+}
+
+function medicineBarcode(item){
+    return medicineValue(item,"barcode","barCode","barcode_no","barcodeNo");
+}
+
+function selectSaleMedicine(id){
+    const item = medicines.find(m => Number(m.id) === Number(id));
+
+    if(!item){
+        $("saleMedicine").value = "";
+        $("saleMedicineName").value = "";
+        $("saleBatch").value = "";
+        $("saleExpiry").value = "";
+        $("saleStock").value = "";
+        $("saleMRP").value = "";
+        $("saleRate").value = "";
+        $("saleGST").value = "";
+        return;
+    }
+
+    $("saleMedicine").value = item.id;
+    $("saleMedicineSearch").value = medicineName(item);
+    $("saleMedicineName").value = medicineName(item);
+    $("saleBatch").value = medicineValue(item,"batch_no","batchNo") || "-";
+    $("saleExpiry").value = String(medicineValue(item,"expiry_date","expiryDate") || "-").slice(0,10);
+    $("saleStock").value = Number(medicineValue(item,"current_stock","currentStock") || 0);
+    $("saleMRP").value = medicineValue(item,"mrp") || 0;
+    $("saleRate").value = medicineValue(item,"sale_rate","saleRate") || 0;
+    $("saleGST").value = medicineValue(item,"gst_percent","gstPercent") || 0;
+    $("saleMedicineSuggestions").classList.add("hidden");
+}
+
+function renderSaleMedicineSuggestions(){
+    const query = $("saleMedicineSearch").value.trim().toLowerCase();
+    const box = $("saleMedicineSuggestions");
+
+    if(!query){
+        box.innerHTML = "";
+        box.classList.add("hidden");
+        return;
+    }
+
+    const matches = medicines.filter(item => [
+        medicineName(item),
+        medicineValue(item,"generic_name","genericName"),
+        medicineValue(item,"batch_no","batchNo"),
+        medicineValue(item,"barcode","barCode","barcode_no","barcodeNo"),
+        medicineValue(item,"company_name","companyName")
+    ].join(" ").toLowerCase().includes(query)).slice(0,10);
+
+    box.innerHTML = matches.length ? matches.map(item => `
+        <button type="button" class="medicine-suggestion" onclick="selectSaleMedicine(${Number(item.id)})">
+            <strong>${escapeHtml(medicineName(item))}</strong>
+            <small>Batch: ${escapeHtml(medicineValue(item,"batch_no","batchNo") || "-")} · Stock: ${medicineValue(item,"current_stock","currentStock") || 0} · MRP: ${money(medicineValue(item,"mrp"))}</small>
+        </button>
+    `).join("") : `<div style="padding:12px;color:#6b7280">No matching medicine found</div>`;
+
+    box.classList.remove("hidden");
+}
+
+function fillSaleMedicineSelect(){
+    // Keep the hidden field compatible with the existing sale logic.
+}
+
+$("saleMedicineSearch").addEventListener("input", renderSaleMedicineSuggestions);
+$("saleMedicineSearch").addEventListener("focus", renderSaleMedicineSuggestions);
+
+document.addEventListener("click", function(e){
+    if(!e.target.closest(".medicine-search-box")){
+        $("saleMedicineSuggestions")?.classList.add("hidden");
+    }
+});
+
+
+function addSaleItem(){
+
+    const medicineId =
+        Number($("saleMedicine").value);
+
+    const qty =
+        Number($("saleQty").value || 0);
+
+    if(!medicineId){
+        showToast(
+            "Medicine select करें.",
+            "warning"
+        );
+        return;
+    }
+
+    if(qty <= 0){
+        showToast(
+            "Valid quantity डालें.",
+            "warning"
+        );
+        return;
+    }
+
+    const medicine =
+        medicines.find(
+            m =>
+                Number(m.id)===medicineId
+        );
+
+    if(!medicine){
+        return;
+    }
+
+    const stock =
+        Number(
+            medicine.current_stock ??
+            medicine.currentStock ??
+            0
+        );
+
+    const existing =
+        saleItems.find(
+            x =>
+                Number(x.medicineId) ===
+                medicineId
+        );
+
+    const totalQty =
+        qty +
+        Number(existing?.quantity || 0);
+
+    if(totalQty > stock){
+
+        showToast(
+            `Available stock केवल ${stock} है.`,
+            "warning"
+        );
+
+        return;
+    }
+
+    const rate =
+        Number(
+            $("saleRate").value || 0
+        );
+
+    const gst =
+        Number(
+            $("saleGST").value || 0
+        );
+
+    if(existing){
+
+        existing.quantity =
+            totalQty;
+
+    }else{
+
+        saleItems.push({
+
+            medicineId,
+
+            medicineName:
+                medicine.medicine_name ||
+                medicine.medicineName,
+
+            batchNo:
+                medicine.batch_no ||
+                medicine.batchNo ||
+                "",
+
+            stock,
+
+            quantity:qty,
+
+            saleRate:rate,
+
+            gstPercent:gst
+
+        });
+    }
+
+    renderSaleItems();
+
+    $("saleQty").value = 1;
+}
+
+
+function removeSaleItem(index){
+
+    saleItems.splice(
+        index,
+        1
+    );
+
+    renderSaleItems();
+}
+
+
+function renderSaleItems(){
+
+    const body =
+        $("saleItemsBody");
+
+    $("saleItemCount").textContent =
+        `${saleItems.length} Items`;
+
+    if(!saleItems.length){
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="9"
+                    style="text-align:center">
+                    No medicine added
+                </td>
+            </tr>
+        `;
+
+        calculateSaleTotal();
+
+        return;
+    }
+
+    body.innerHTML =
+        saleItems.map((item,index)=>{
+
+            const base =
+                item.quantity *
+                item.saleRate;
+
+            const gstAmount =
+                base *
+                item.gstPercent /
+                100;
+
+            const total =
+                base + gstAmount;
+
+            return `
+
+            <tr>
+
+                <td>${index+1}</td>
+
+                <td>
+                    ${escapeHtml(
+                        item.medicineName
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        item.batchNo || "-"
+                    )}
+                </td>
+
+                <td>${item.stock}</td>
+
+                <td>
+                    <input
+                        type="number"
+                        min="1"
+                        max="${item.stock}"
+                        value="${item.quantity}"
+                        style="width:70px;padding:6px"
+                        onchange="updateSaleQty(${index},this.value)">
+                </td>
+
+                <td>
+                    ${money(item.saleRate)}
+                </td>
+
+                <td>
+                    ${item.gstPercent}%
+                </td>
+
+                <td>
+                    <strong>
+                        ${money(total)}
+                    </strong>
+                </td>
+
+                <td>
+                    <button
+                        class="btn btn-danger"
+                        onclick="removeSaleItem(${index})">
+                        ✕
+                    </button>
+                </td>
+
+            </tr>
+            `;
+
+        }).join("");
+
+    calculateSaleTotal();
+}
+
+
+function updateSaleQty(index,value){
+
+    const qty =
+        Number(value || 0);
+
+    const item =
+        saleItems[index];
+
+    if(!item){
+        return;
+    }
+
+    if(qty < 1 || qty > item.stock){
+
+        showToast(
+            `Quantity 1 से ${item.stock} के बीच होनी चाहिए.`,
+            "warning"
+        );
+
+        renderSaleItems();
+
+        return;
+    }
+
+    item.quantity =
+        qty;
+
+    renderSaleItems();
+}
+
+
+function calculateSaleTotal(){
+
+    let subtotal = 0;
+    let gstAmount = 0;
+
+    saleItems.forEach(item=>{
+
+        const base =
+            Number(item.quantity) *
+            Number(item.saleRate);
+
+        subtotal += base;
+
+        gstAmount +=
+            base *
+            Number(item.gstPercent) /
+            100;
+    });
+
+    const discount =
+        Number(
+            $("saleDiscount").value || 0
+        );
+
+    const grand =
+        Math.max(
+            0,
+            subtotal +
+            gstAmount -
+            discount
+        );
+
+    $("saleSubtotal").textContent =
+        money(subtotal);
+
+    $("saleGSTAmount").textContent =
+        money(gstAmount);
+
+    $("saleGrandTotal").textContent =
+        money(grand);
+
+    return {
+        subtotal,
+        gstAmount,
+        discount,
+        grand
+    };
+}
+
+
+async function saveSale(){
+
+    try{
+
+        if(!saleItems.length){
+
+            throw new Error(
+                "कम से कम एक medicine add करें."
+            );
+        }
+
+        const totals =
+            calculateSaleTotal();
+
+        const payload = {
+
+            invoiceNo:
+                $("saleInvoice").value ||
+                generateInvoiceNo(),
+
+            patientId:
+                $("salePatient").value
+                ? Number(
+                    $("salePatient").value
+                  )
+                : null,
+
+            customerMobile:
+                $("saleCustomerMobile").value.trim(),
+
+            subtotal:
+                totals.subtotal,
+
+            discount:
+                totals.discount,
+
+            gstAmount:
+                totals.gstAmount,
+
+            grandTotal:
+                totals.grand,
+
+            items:
+                saleItems.map(item=>({
+
+                    medicineId:
+                        Number(item.medicineId),
+
+                    batchNo:
+                        item.batchNo || null,
+
+                    quantity:
+                        Number(item.quantity),
+
+                    saleRate:
+                        Number(item.saleRate),
+
+                    gstPercent:
+                        Number(item.gstPercent),
+
+                    total:
+                        Number(
+                            item.quantity *
+                            item.saleRate *
+                            (1 +
+                             item.gstPercent/100)
+                        )
+
+                }))
+
+        };
+
+        const data =
+            await api(
+                "/api/sales",
+                {
+                    method:"POST",
+                    body:JSON.stringify(payload)
+                }
+            );
+
+        const saved =
+            data.sale ||
+            data;
+
+        showToast(
+            data.message ||
+            "Sale saved successfully",
+            "success"
+        );
+
+        if(saved){
+            printSale(saved);
+        }
+
+        clearSale();
+
+        await loadMedicines();
+
+        await loadDashboard();
+
+        await loadRecentSalesMini();
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+function clearSale(){
+
+    saleItems = [];
+
+    $("saleInvoice").value =
+        generateInvoiceNo();
+
+    $("saleCustomerMobile").value =
+        "";
+
+    $("saleDiscount").value =
+        0;
+
+    $("saleMedicine").value =
+        "";
+
+    $("saleMedicineSearch").value =
+        "";
+
+    $("saleMedicineName").value =
+        "";
+
+    $("saleBatch").value =
+        "";
+
+    $("saleExpiry").value =
+        "";
+
+    $("saleStock").value =
+        "";
+
+    $("saleMRP").value =
+        "";
+
+    $("saleRate").value =
+        "";
+
+    $("saleGST").value =
+        "";
+
+    $("saleMedicineSuggestions").innerHTML =
+        "";
+
+    $("saleMedicineSuggestions").classList.add("hidden");
+
+    $("saleQty").value =
+        1;
+
+    renderSaleItems();
+
+    calculateSaleTotal();
+}
+
+
+async function loadRecentSalesMini(){
+
+    try{
+
+        const data =
+            await api(
+                "/api/sales"
+            );
+
+        const list =
+            normalizeList(
+                data,
+                ["sales","items"]
+            );
+
+        $("recentSalesMini").innerHTML =
+            list.slice(0,5).map(s=>`
+
+                <div style="
+                    padding:10px 0;
+                    border-bottom:1px solid #eee">
+
+                    <strong>
+                        ${escapeHtml(
+                            s.invoice_no ||
+                            s.invoiceNo ||
+                            "-"
+                        )}
+                    </strong>
+
+                    <div style="
+                        font-size:12px;
+                        color:#6b7280">
+
+                        ${money(
+                            s.grand_total ??
+                            s.grandTotal ??
+                            0
+                        )}
+
+                    </div>
+
+                </div>
+
+            `).join("") ||
+            `<p style="color:#6b7280">
+                No sales
+            </p>`;
+
+    }catch{}
+
+}
+
+
+function fillPatientSelect(){
+
+    const select =
+        $("salePatient");
+
+    if(!select){
+        return;
+    }
+
+    select.innerHTML = `
+        <option value="">
+            Walk-in Customer
+        </option>
+    `;
+
+    patients.forEach(p=>{
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            p.id;
+
+        option.textContent =
+            `${p.patient_name ||
+              p.patientName ||
+              "Patient"} ${
+              p.mobile || ""
+            }`;
+
+        select.appendChild(option);
+    });
+}
+
+
+/* ============================================================
+   PURCHASE
+============================================================ */
+
+function loadPurchasePage(){
+
+    fillPurchaseMedicineSelect();
+    fillSupplierSelect();
+
+    if(!$("purchaseDate").value){
+        $("purchaseDate").value =
+            today();
+    }
+}
+
+
+function fillPurchaseMedicineSelect(){
+
+    const select =
+        $("purchaseMedicine");
+
+    if(!select){
+        return;
+    }
+
+    select.innerHTML = `
+        <option value="">
+            Select Medicine
+        </option>
+    `;
+
+    medicines.forEach(m=>{
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            m.id;
+
+        option.textContent =
+            m.medicine_name ||
+            m.medicineName ||
+            "-";
+
+        select.appendChild(option);
+    });
+}
+
+
+$("purchaseMedicine").addEventListener(
+    "change",
+    function(){
+
+        const m =
+            medicines.find(
+                x =>
+                    Number(x.id) ===
+                    Number(this.value)
+            );
+
+        if(!m){
+            return;
+        }
+
+        $("purchaseRate").value =
+            m.purchase_rate ??
+            m.purchaseRate ??
+            0;
+
+        $("purchaseGST").value =
+            m.gst_percent ??
+            m.gstPercent ??
+            0;
+    }
+);
+
+
+function addPurchaseItem(){
+
+    const medicineId =
+        Number(
+            $("purchaseMedicine").value
+        );
+
+    const quantity =
+        Number(
+            $("purchaseQty").value || 0
+        );
+
+    if(!medicineId){
+        showToast(
+            "Medicine select करें.",
+            "warning"
+        );
+        return;
+    }
+
+    if(quantity <= 0){
+        showToast(
+            "Quantity सही डालें.",
+            "warning"
+        );
+        return;
+    }
+
+    const medicine =
+        medicines.find(
+            m =>
+                Number(m.id)===medicineId
+        );
+
+    if(!medicine){
+        return;
+    }
+
+    purchaseItems.push({
+
+        medicineId,
+
+        medicineName:
+            medicine.medicine_name ||
+            medicine.medicineName,
+
+        batchNo:
+            medicine.batch_no ||
+            medicine.batchNo ||
+            "",
+
+        expiryDate:
+            medicine.expiry_date ||
+            medicine.expiryDate ||
+            "",
+
+        quantity,
+
+        purchaseRate:
+            Number(
+                $("purchaseRate").value || 0
+            ),
+
+        gstPercent:
+            Number(
+                $("purchaseGST").value || 0
+            )
+
+    });
+
+    renderPurchaseItems();
+}
+
+
+function removePurchaseItem(index){
+
+    purchaseItems.splice(
+        index,
+        1
+    );
+
+    renderPurchaseItems();
+}
+
+
+function renderPurchaseItems(){
+
+    const body =
+        $("purchaseItemsBody");
+
+    if(!purchaseItems.length){
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="8"
+                    style="text-align:center">
+                    No items
+                </td>
+            </tr>
+        `;
+
+        calculatePurchaseTotal();
+
+        return;
+    }
+
+    body.innerHTML =
+        purchaseItems.map((item,index)=>{
+
+            const base =
+                item.quantity *
+                item.purchaseRate;
+
+            const gst =
+                base *
+                item.gstPercent /
+                100;
+
+            return `
+
+            <tr>
+
+                <td>
+                    ${escapeHtml(
+                        item.medicineName
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        item.batchNo || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        String(
+                            item.expiryDate || "-"
+                        ).slice(0,10)
+                    )}
+                </td>
+
+                <td>
+                    ${item.quantity}
+                </td>
+
+                <td>
+                    ${money(
+                        item.purchaseRate
+                    )}
+                </td>
+
+                <td>
+                    ${item.gstPercent}%
+                </td>
+
+                <td>
+                    ${money(
+                        base + gst
+                    )}
+                </td>
+
+                <td>
+                    <button
+                        class="btn btn-danger"
+                        onclick="removePurchaseItem(${index})">
+                        ✕
+                    </button>
+                </td>
+
+            </tr>
+
+            `;
+
+        }).join("");
+
+    calculatePurchaseTotal();
+}
+
+
+function calculatePurchaseTotal(){
+
+    let subtotal = 0;
+    let gst = 0;
+
+    purchaseItems.forEach(item=>{
+
+        const base =
+            item.quantity *
+            item.purchaseRate;
+
+        subtotal += base;
+
+        gst +=
+            base *
+            item.gstPercent /
+            100;
+    });
+
+    $("purchaseSubtotal").textContent =
+        money(subtotal);
+
+    $("purchaseGSTAmount").textContent =
+        money(gst);
+
+    $("purchaseGrandTotal").textContent =
+        money(
+            subtotal + gst
+        );
+
+    return {
+        subtotal,
+        gstAmount:gst,
+        grandTotal:subtotal+gst
+    };
+}
+
+
+async function savePurchase(){
+
+    try{
+
+        if(!purchaseItems.length){
+            throw new Error(
+                "Purchase में items add करें."
+            );
+        }
+
+        const invoiceNo =
+            $("purchaseInvoice")
+                .value
+                .trim();
+
+        if(!invoiceNo){
+            throw new Error(
+                "Invoice No. डालें."
+            );
+        }
+
+        const totals =
+            calculatePurchaseTotal();
+
+        const payload = {
+
+            supplierId:
+                $("purchaseSupplier").value
+                ? Number(
+                    $("purchaseSupplier").value
+                  )
+                : null,
+
+            invoiceNo,
+
+            invoiceDate:
+                $("purchaseDate").value ||
+                today(),
+
+            subtotal:
+                totals.subtotal,
+
+            gstAmount:
+                totals.gstAmount,
+
+            grandTotal:
+                totals.grandTotal,
+
+            items:
+                purchaseItems.map(item=>({
+
+                    medicineId:
+                        Number(item.medicineId),
+
+                    batchNo:
+                        item.batchNo || null,
+
+                    expiryDate:
+                        item.expiryDate || null,
+
+                    quantity:
+                        Number(item.quantity),
+
+                    purchaseRate:
+                        Number(item.purchaseRate),
+
+                    gstPercent:
+                        Number(item.gstPercent),
+
+                    total:
+                        Number(
+                            item.quantity *
+                            item.purchaseRate *
+                            (
+                                1 +
+                                item.gstPercent/100
+                            )
+                        )
+
+                }))
+
+        };
+
+        const data =
+            await api(
+                "/api/purchases",
+                {
+                    method:"POST",
+                    body:JSON.stringify(payload)
+                }
+            );
+
+        showToast(
+            data.message ||
+            "Purchase saved successfully",
+            "success"
+        );
+
+        purchaseItems = [];
+
+        $("purchaseInvoice").value =
+            "";
+
+        renderPurchaseItems();
+
+        await loadMedicines();
+
+        await loadDashboard();
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* ============================================================
+   STORE
+============================================================ */
+
+async function loadStoreItems(){
+
+    try{
+
+        const data =
+            await api(
+                "/api/store-items"
+            );
+
+        storeItems =
+            normalizeList(
+                data,
+                ["items","storeItems"]
+            );
+
+        renderStoreTable();
+
+    }catch(error){
+
+        $("storeTable").innerHTML =
+            `<p class="loading">
+                ${escapeHtml(error.message)}
+            </p>`;
+    }
+}
+
+
+function renderStoreTable(){
+
+    const search =
+        ($("storeSearch")?.value || "")
+            .toLowerCase();
+
+    const list =
+        storeItems.filter(item=>{
+
+            const text = [
+                item.item_name,
+                item.itemName,
+                item.category,
+                item.company_name,
+                item.companyName,
+                item.barcode
+            ]
+            .join(" ")
+            .toLowerCase();
+
+            return text.includes(search);
+        });
+
+    if(!list.length){
+
+        $("storeTable").innerHTML =
+            `<p class="loading">
+                No store item found
+            </p>`;
+
+        return;
+    }
+
+    $("storeTable").innerHTML = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Company</th>
+                    <th>Barcode</th>
+                    <th>Unit</th>
+                    <th>Purchase</th>
+                    <th>Sale</th>
+                    <th>MRP</th>
+                    <th>GST</th>
+                    <th>Stock</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${list.map(item=>{
+
+                    const stock =
+                        Number(
+                            item.current_stock ??
+                            item.currentStock ??
+                            0
+                        );
+
+                    const min =
+                        Number(
+                            item.minimum_stock ??
+                            item.minimumStock ??
+                            0
+                        );
+
+                    return `
+
+                    <tr>
+
+                        <td>${item.id}</td>
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(
+                                    item.item_name ||
+                                    item.itemName ||
+                                    "-"
+                                )}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.category || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.company_name ||
+                                item.companyName ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.barcode || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.unit || "Piece"
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(
+                                item.purchase_rate ??
+                                item.purchaseRate
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(
+                                item.sale_rate ??
+                                item.saleRate
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(item.mrp)}
+                        </td>
+
+                        <td>
+                            ${item.gst_percent ??
+                             item.gstPercent ??
+                             0}%
+                        </td>
+
+                        <td>
+
+                            <span class="badge ${
+                                stock <= min
+                                ? "badge-danger"
+                                : "badge-success"
+                            }">
+                                ${stock}
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn btn-info"
+                                onclick="editStoreItem(${item.id})">
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn btn-danger"
+                                onclick="deleteStoreItem(${item.id})">
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+                    `;
+                }).join("")}
+
+            </tbody>
+
+        </table>
+    `;
+}
+
+
+function filterStoreItems(){
+    renderStoreTable();
+}
+
+
+function openStoreModal(item=null){
+
+    editingStoreId =
+        item?.id || null;
+
+    $("storeEditId").value =
+        editingStoreId || "";
+
+    $("sName").value =
+        item?.item_name ||
+        item?.itemName ||
+        "";
+
+    $("sCategory").value =
+        item?.category ||
+        "";
+
+    $("sCompany").value =
+        item?.company_name ||
+        item?.companyName ||
+        "";
+
+    $("sBarcode").value =
+        item?.barcode ||
+        "";
+
+    $("sUnit").value =
+        item?.unit ||
+        "Piece";
+
+    $("sPurchaseRate").value =
+        item?.purchase_rate ??
+        item?.purchaseRate ??
+        0;
+
+    $("sSaleRate").value =
+        item?.sale_rate ??
+        item?.saleRate ??
+        0;
+
+    $("sMrp").value =
+        item?.mrp ?? 0;
+
+    $("sGST").value =
+        item?.gst_percent ??
+        item?.gstPercent ??
+        0;
+
+    $("sStock").value =
+        item?.current_stock ??
+        item?.currentStock ??
+        0;
+
+    $("sMinStock").value =
+        item?.minimum_stock ??
+        item?.minimumStock ??
+        5;
+
+    $("storeModal")
+        .classList
+        .add("show");
+}
+
+
+function editStoreItem(id){
+
+    const item =
+        storeItems.find(
+            x =>
+                Number(x.id)===Number(id)
+        );
+
+    if(item){
+        openStoreModal(item);
+    }
+}
+
+
+async function saveStoreItem(){
+
+    try{
+
+        const payload = {
+
+            itemName:
+                $("sName").value.trim(),
+
+            category:
+                $("sCategory").value.trim(),
+
+            companyName:
+                $("sCompany").value.trim(),
+
+            barcode:
+                $("sBarcode").value.trim(),
+
+            unit:
+                $("sUnit").value,
+
+            purchaseRate:
+                Number(
+                    $("sPurchaseRate").value || 0
+                ),
+
+            saleRate:
+                Number(
+                    $("sSaleRate").value || 0
+                ),
+
+            mrp:
+                Number(
+                    $("sMrp").value || 0
+                ),
+
+            gstPercent:
+                Number(
+                    $("sGST").value || 0
+                ),
+
+            currentStock:
+                Number(
+                    $("sStock").value || 0
+                ),
+
+            minimumStock:
+                Number(
+                    $("sMinStock").value || 0
+                )
+
+        };
+
+        if(!payload.itemName){
+
+            throw new Error(
+                "Item Name required."
+            );
+        }
+
+        const path =
+            editingStoreId
+            ? `/api/store-items/${editingStoreId}`
+            : "/api/store-items";
+
+        const method =
+            editingStoreId
+            ? "PATCH"
+            : "POST";
+
+        await api(
+            path,
+            {
+                method,
+                body:JSON.stringify(payload)
+            }
+        );
+
+        closeModal("storeModal");
+
+        showToast(
+            editingStoreId
+            ? "Store item updated"
+            : "Store item added",
+            "success"
+        );
+
+        editingStoreId = null;
+
+        await loadStoreItems();
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+async function deleteStoreItem(id){
+
+    if(!confirm(
+        "क्या आप इस item को delete करना चाहते हैं?"
+    )){
+        return;
+    }
+
+    try{
+
+        await api(
+            `/api/store-items/${id}`,
+            {
+                method:"DELETE"
+            }
+        );
+
+        showToast(
+            "Item deleted",
+            "success"
+        );
+
+        await loadStoreItems();
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* ============================================================
+   PATIENTS
+============================================================ */
+
+async function loadPatients(){
+
+    try{
+
+        const data =
+            await api(
+                "/api/patients"
+            );
+
+        patients =
+            normalizeList(
+                data,
+                ["patients","items"]
+            );
+
+        renderPatients();
+
+        fillPatientSelect();
+
+    }catch(error){
+
+        $("patientsTable").innerHTML =
+            `<p class="loading">
+                ${escapeHtml(error.message)}
+            </p>`;
+    }
+}
+
+
+function renderPatients(){
+
+    if(!patients.length){
+
+        $("patientsTable").innerHTML =
+            `<p class="loading">
+                No patients found
+            </p>`;
+
+        return;
+    }
+
+    $("patientsTable").innerHTML = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Doctor</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${patients.map(p=>`
+
+                    <tr>
+
+                        <td>${p.id}</td>
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(
+                                    p.patient_name ||
+                                    p.patientName ||
+                                    "-"
+                                )}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                p.mobile || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${p.age ?? "-"}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                p.gender || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                p.doctor_name ||
+                                p.doctorName ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                p.address || "-"
+                            )}
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn btn-info"
+                                onclick="editPatient(${p.id})">
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn btn-danger"
+                                onclick="deletePatient(${p.id})">
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `).join("")}
+
+            </tbody>
+
+        </table>
+    `;
+}
+
+
+function openPatientModal(item=null){
+
+    editingPatientId =
+        item?.id || null;
+
+    $("patientEditId").value =
+        editingPatientId || "";
+
+    $("pName").value =
+        item?.patient_name ||
+        item?.patientName ||
+        "";
+
+    $("pMobile").value =
+        item?.mobile || "";
+
+    $("pAge").value =
+        item?.age ?? "";
+
+    $("pGender").value =
+        item?.gender || "";
+
+    $("pDoctor").value =
+        item?.doctor_name ||
+        item?.doctorName ||
+        "";
+
+    $("pAddress").value =
+        item?.address || "";
+
+    $("patientModal")
+        .classList
+        .add("show");
+}
+
+
+function editPatient(id){
+
+    const p =
+        patients.find(
+            x =>
+                Number(x.id)===Number(id)
+        );
+
+    if(p){
+        openPatientModal(p);
+    }
+}
+
+
+async function savePatient(){
+
+    try{
+
+        const payload = {
+
+            patientName:
+                $("pName").value.trim(),
+
+            mobile:
+                $("pMobile").value.trim(),
+
+            age:
+                $("pAge").value
+                ? Number($("pAge").value)
+                : null,
+
+            gender:
+                $("pGender").value,
+
+            doctorName:
+                $("pDoctor").value.trim(),
+
+            address:
+                $("pAddress").value.trim()
+
+        };
+
+        if(!payload.patientName){
+            throw new Error(
+                "Patient Name required."
+            );
+        }
+
+        const path =
+            editingPatientId
+            ? `/api/patients/${editingPatientId}`
+            : "/api/patients";
+
+        const method =
+            editingPatientId
+            ? "PATCH"
+            : "POST";
+
+        await api(
+            path,
+            {
+                method,
+                body:JSON.stringify(payload)
+            }
+        );
+
+        closeModal("patientModal");
+
+        showToast(
+            "Patient saved successfully",
+            "success"
+        );
+
+        editingPatientId = null;
+
+        await loadPatients();
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+async function deletePatient(id){
+
+    if(!confirm(
+        "क्या आप patient delete करना चाहते हैं?"
+    )){
+        return;
+    }
+
+    try{
+
+        await api(
+            `/api/patients/${id}`,
+            {
+                method:"DELETE"
+            }
+        );
+
+        showToast(
+            "Patient deleted",
+            "success"
+        );
+
+        await loadPatients();
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* ============================================================
+   SUPPLIERS
+============================================================ */
+
+async function loadSuppliers(){
+
+    try{
+
+        const data =
+            await api(
+                "/api/suppliers"
+            );
+
+        suppliers =
+            normalizeList(
+                data,
+                ["suppliers","items"]
+            );
+
+        renderSuppliers();
+
+        fillSupplierSelect();
+
+    }catch(error){
+
+        $("suppliersTable").innerHTML =
+            `<p class="loading">
+                ${escapeHtml(error.message)}
+            </p>`;
+    }
+}
+
+
+function fillSupplierSelect(){
+
+    const select =
+        $("purchaseSupplier");
+
+    if(!select){
+        return;
+    }
+
+    select.innerHTML = `
+        <option value="">
+            Select Supplier
+        </option>
+    `;
+
+    suppliers.forEach(s=>{
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            s.id;
+
+        option.textContent =
+            s.supplier_name ||
+            s.supplierName ||
+            "-";
+
+        select.appendChild(option);
+    });
+}
+
+
+function renderSuppliers(){
+
+    if(!suppliers.length){
+
+        $("suppliersTable").innerHTML =
+            `<p class="loading">
+                No suppliers found
+            </p>`;
+
+        return;
+    }
+
+    $("suppliersTable").innerHTML = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Supplier</th>
+                    <th>Contact</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>GST</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${suppliers.map(s=>`
+
+                    <tr>
+
+                        <td>${s.id}</td>
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(
+                                    s.supplier_name ||
+                                    s.supplierName ||
+                                    "-"
+                                )}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                s.contact_person ||
+                                s.contactPerson ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                s.mobile || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                s.email || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                s.gst_number ||
+                                s.gstNumber ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                s.address || "-"
+                            )}
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn btn-info"
+                                onclick="editSupplier(${s.id})">
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn btn-danger"
+                                onclick="deleteSupplier(${s.id})">
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `).join("")}
+
+            </tbody>
+
+        </table>
+    `;
+}
+
+
+function openSupplierModal(item=null){
+
+    editingSupplierId =
+        item?.id || null;
+
+    $("supplierEditId").value =
+        editingSupplierId || "";
+
+    $("supName").value =
+        item?.supplier_name ||
+        item?.supplierName ||
+        "";
+
+    $("supContact").value =
+        item?.contact_person ||
+        item?.contactPerson ||
+        "";
+
+    $("supMobile").value =
+        item?.mobile || "";
+
+    $("supEmail").value =
+        item?.email || "";
+
+    $("supGST").value =
+        item?.gst_number ||
+        item?.gstNumber ||
+        "";
+
+    $("supAddress").value =
+        item?.address || "";
+
+    $("supplierModal")
+        .classList
+        .add("show");
+}
+
+
+function editSupplier(id){
+
+    const s =
+        suppliers.find(
+            x =>
+                Number(x.id)===Number(id)
+        );
+
+    if(s){
+        openSupplierModal(s);
+    }
+}
+
+
+async function saveSupplier(){
+
+    try{
+
+        const payload = {
+
+            supplierName:
+                $("supName").value.trim(),
+
+            contactPerson:
+                $("supContact").value.trim(),
+
+            mobile:
+                $("supMobile").value.trim(),
+
+            email:
+                $("supEmail").value.trim(),
+
+            gstNumber:
+                $("supGST").value.trim(),
+
+            address:
+                $("supAddress").value.trim()
+
+        };
+
+        if(!payload.supplierName){
+            throw new Error(
+                "Supplier Name required."
+            );
+        }
+
+        const path =
+            editingSupplierId
+            ? `/api/suppliers/${editingSupplierId}`
+            : "/api/suppliers";
+
+        const method =
+            editingSupplierId
+            ? "PATCH"
+            : "POST";
+
+        await api(
+            path,
+            {
+                method,
+                body:JSON.stringify(payload)
+            }
+        );
+
+        closeModal("supplierModal");
+
+        showToast(
+            "Supplier saved successfully",
+            "success"
+        );
+
+        editingSupplierId = null;
+
+        await loadSuppliers();
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+async function deleteSupplier(id){
+
+    if(!confirm(
+        "क्या आप supplier delete करना चाहते हैं?"
+    )){
+        return;
+    }
+
+    try{
+
+        await api(
+            `/api/suppliers/${id}`,
+            {
+                method:"DELETE"
+            }
+        );
+
+        showToast(
+            "Supplier deleted",
+            "success"
+        );
+
+        await loadSuppliers();
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* ============================================================
+   SALES RETURN
+============================================================ */
+
+async function loadReturnBill(){
+
+    try{
+
+        const invoice =
+            $("returnInvoice")
+                .value
+                .trim();
+
+        if(!invoice){
+
+            throw new Error(
+                "Invoice No. डालें."
+            );
+        }
+
+        const data =
+            await api(
+                `/api/sales-returns/bill/${encodeURIComponent(invoice)}`
+            );
+
+        currentReturnBill =
+            data.sale ||
+            data;
+
+        renderReturnBill(
+            currentReturnBill
+        );
+
+        $("returnBillArea")
+            .classList
+            .remove("hidden");
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+function renderReturnBill(bill){
+
+    $("returnBillNo").textContent =
+        bill.invoice_no ||
+        bill.invoiceNo ||
+        "-";
+
+    $("returnCustomer").textContent =
+        bill.customer_name ||
+        bill.patient_name ||
+        bill.patientName ||
+        "Walk-in";
+
+    $("returnBillTotal").textContent =
+        money(
+            bill.grand_total ??
+            bill.grandTotal ??
+            0
+        );
+
+    const items =
+        normalizeList(
+            bill,
+            ["items","saleItems"]
+        );
+
+    if(!items.length){
+
+        $("returnItemsBody").innerHTML = `
+            <tr>
+                <td colspan="8"
+                    style="text-align:center">
+                    No returnable items
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    $("returnItemsBody").innerHTML =
+        items.map((item,index)=>{
+
+            const sold =
+                Number(
+                    item.quantity ??
+                    item.sold_quantity ??
+                    item.soldQuantity ??
+                    0
+                );
+
+            const returned =
+                Number(
+                    item.returned_quantity ??
+                    item.returnedQuantity ??
+                    0
+                );
+
+            const returnable =
+                Number(
+                    item.returnable_quantity ??
+                    item.returnableQuantity ??
+                    sold-returned
+                );
+
+            const rate =
+                Number(
+                    item.unit_return_amount ??
+                    item.unitReturnAmount ??
+                    item.sale_rate ??
+                    item.saleRate ??
+                    0
+                );
+
+            return `
+
+            <tr>
+
+                <td>
+                    ${escapeHtml(
+                        item.medicine_name ||
+                        item.medicineName ||
+                        "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        item.batch_no ||
+                        item.batchNo ||
+                        "-"
+                    )}
+                </td>
+
+                <td>${sold}</td>
+
+                <td>${returned}</td>
+
+                <td>
+                    <span class="badge ${
+                        returnable > 0
+                        ? "badge-success"
+                        : "badge-danger"
+                    }">
+                        ${returnable}
+                    </span>
+                </td>
+
+                <td>
+
+                    <input
+                        class="return-qty"
+                        data-index="${index}"
+                        data-max="${returnable}"
+                        type="number"
+                        min="0"
+                        max="${returnable}"
+                        value="0"
+                        style="width:80px"
+                        onchange="calculateReturnTotal()">
+
+                </td>
+
+                <td>
+                    <span
+                        class="return-amount"
+                        data-rate="${rate}">
+                        ₹0.00
+                    </span>
+                </td>
+
+                <td>
+
+                    <input
+                        class="return-reason"
+                        data-index="${index}"
+                        placeholder="Reason"
+                        style="width:130px;padding:6px">
+
+                </td>
+
+            </tr>
+
+            `;
+        }).join("");
+}
+
+
+function calculateReturnTotal(){
+
+    let total = 0;
+
+    document
+        .querySelectorAll(".return-qty")
+        .forEach(input=>{
+
+            let qty =
+                Number(input.value || 0);
+
+            const max =
+                Number(
+                    input.dataset.max || 0
+                );
+
+            if(qty > max){
+
+                qty = max;
+
+                input.value =
+                    max;
+            }
+
+            const amountEl =
+                input
+                    .closest("tr")
+                    ?.querySelector(
+                        ".return-amount"
+                    );
+
+            const rate =
+                Number(
+                    amountEl?.dataset.rate ||
+                    0
+                );
+
+            const amount =
+                qty * rate;
+
+            if(amountEl){
+                amountEl.textContent =
+                    money(amount);
+            }
+
+            total += amount;
+        });
+
+    $("returnTotal").value =
+        money(total);
+
+    return total;
+}
+
+
+async function processSaleReturn(){
+
+    try{
+
+        if(!currentReturnBill){
+
+            throw new Error(
+                "पहले original bill load करें."
+            );
+        }
+
+        const rows =
+            Array.from(
+                document.querySelectorAll(
+                    ".return-qty"
+                )
+            );
+
+        const items = [];
+
+        rows.forEach(input=>{
+
+            const qty =
+                Number(
+                    input.value || 0
+                );
+
+            const max =
+                Number(
+                    input.dataset.max || 0
+                );
+
+            if(qty < 0 || qty > max){
+
+                throw new Error(
+                    "Return quantity sold/returnable quantity से अधिक नहीं हो सकती."
+                );
+            }
+
+            if(qty <= 0){
+                return;
+            }
+
+            const index =
+                Number(
+                    input.dataset.index
+                );
+
+            const source =
+                normalizeList(
+                    currentReturnBill,
+                    ["items","saleItems"]
+                )[index];
+
+            const amountEl =
+                input
+                    .closest("tr")
+                    ?.querySelector(
+                        ".return-amount"
+                    );
+
+            const rate =
+                Number(
+                    amountEl?.dataset.rate ||
+                    source?.unit_return_amount ||
+                    source?.unitReturnAmount ||
+                    source?.sale_rate ||
+                    source?.saleRate ||
+                    0
+                );
+
+            const reasonInput =
+                input
+                    .closest("tr")
+                    ?.querySelector(
+                        ".return-reason"
+                    );
+
+            items.push({
+
+                saleItemId:
+                    source.id ||
+                    source.sale_item_id ||
+                    source.saleItemId,
+
+                medicineId:
+                    source.medicine_id ||
+                    source.medicineId,
+
+                quantity:qty,
+
+                rate,
+
+                amount:
+                    qty * rate,
+
+                reason:
+                    reasonInput?.value.trim() ||
+                    $("returnCommonReason").value.trim() ||
+                    "Customer Return"
+
+            });
+
+        });
+
+        if(!items.length){
+
+            throw new Error(
+                "Return quantity डालें."
+            );
+        }
+
+        const total =
+            calculateReturnTotal();
+
+        if(total <= 0){
+
+            throw new Error(
+                "Return amount zero है."
+            );
+        }
+
+        const payload = {
+
+            saleId:
+                currentReturnBill.id ||
+                currentReturnBill.sale_id,
+
+            invoiceNo:
+                currentReturnBill.invoice_no ||
+                currentReturnBill.invoiceNo,
+
+            customerName:
+                currentReturnBill.customer_name ||
+                currentReturnBill.patient_name ||
+                currentReturnBill.patientName ||
+                "",
+
+            customerMobile:
+                currentReturnBill.customer_mobile ||
+                currentReturnBill.customerMobile ||
+                "",
+
+            refundMethod:
+                $("refundMethod").value,
+
+            reason:
+                $("returnCommonReason")
+                    .value
+                    .trim() ||
+                "Customer Return",
+
+            items
+
+        };
+
+        const data =
+            await api(
+                "/api/sales-returns",
+                {
+                    method:"POST",
+                    body:JSON.stringify(payload)
+                }
+            );
+
+        showToast(
+            data.message ||
+            "Sales return processed successfully",
+            "success"
+        );
+
+        const saved =
+            data.return ||
+            data;
+
+        printReturn(saved);
+
+        currentReturnBill = null;
+
+        $("returnBillArea")
+            .classList
+            .add("hidden");
+
+        $("returnInvoice").value =
+            "";
+
+        await loadMedicines();
+
+        await loadDashboard();
+
+        await loadReturnHistory();
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+async function loadReturnHistory(){
+
+    try{
+
+        const data =
+            await api(
+                "/api/sales-returns"
+            );
+
+        const list =
+            normalizeList(
+                data,
+                ["returns","items"]
+            );
+
+        if(!list.length){
+
+            $("returnHistory").innerHTML =
+                `<p class="loading">
+                    No return history
+                </p>`;
+
+            return;
+        }
+
+        $("returnHistory").innerHTML = `
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Return No.</th>
+                        <th>Invoice</th>
+                        <th>Customer</th>
+                        <th>Refund Method</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    ${list.map(r=>`
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    ${escapeHtml(
+                                        r.return_number ||
+                                        r.returnNumber ||
+                                        "-"
+                                    )}
+                                </strong>
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    r.invoice_no ||
+                                    r.invoiceNo ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    r.customer_name ||
+                                    r.customerName ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    r.refund_method ||
+                                    r.refundMethod ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${money(
+                                    r.total_amount ??
+                                    r.totalAmount ??
+                                    0
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    r.created_at ||
+                                    r.createdAt ||
+                                    "-"
+                                )}
+                            </td>
+
+                        </tr>
+
+                    `).join("")}
+
+                </tbody>
+
+            </table>
+        `;
+
+    }catch(error){
+
+        $("returnHistory").innerHTML =
+            `<p class="loading">
+                ${escapeHtml(error.message)}
+            </p>`;
+    }
+}
+
+
+/* ============================================================
+   REPORTS
+============================================================ */
+
+function setDefaultReportDates(){
+
+    const d =
+        new Date();
+
+    const to =
+        d.toISOString()
+         .slice(0,10);
+
+    const fromDate =
+        new Date(d);
+
+    fromDate.setDate(
+        d.getDate()-30
+    );
+
+    const from =
+        fromDate
+            .toISOString()
+            .slice(0,10);
+
+    $("reportFrom").value =
+        from;
+
+    $("reportTo").value =
+        to;
+}
+
+
+async function runReport(){
+
+    try{
+
+        const type =
+            $("reportType").value;
+
+        const from =
+            $("reportFrom").value;
+
+        const to =
+            $("reportTo").value;
+
+        let path = "";
+
+        if(type==="sales"){
+
+            path =
+                `/api/reports/sales?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
+
+        }else if(type==="purchase"){
+
+            path =
+                `/api/reports/purchases?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
+
+        }else if(type==="stock"){
+
+            path =
+                "/api/reports/stock";
+
+        }else{
+
+            path =
+                `/api/reports/sales-returns?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
+
+        }
+
+        const data =
+            await api(path);
+
+        renderReport(
+            data,
+            type
+        );
+
+    }catch(error){
+
+        $("reportResult").innerHTML =
+            `<p class="loading">
+                ${escapeHtml(error.message)}
+            </p>`;
+    }
+}
+
+
+function renderReport(data,type){
+
+    const list =
+        normalizeList(
+            data,
+            [
+                "sales",
+                "purchases",
+                "stock",
+                "returns",
+                "items",
+                "rows"
+            ]
+        );
+
+    if(!list.length){
+
+        $("reportResult").innerHTML =
+            `<p class="loading">
+                No data found
+            </p>`;
+
+        return;
+    }
+
+    let headers = [];
+
+    if(type==="sales"){
+
+        headers = [
+            "Invoice",
+            "Patient",
+            "Subtotal",
+            "GST",
+            "Discount",
+            "Total",
+            "Date"
+        ];
+
+    }else if(type==="purchase"){
+
+        headers = [
+            "Invoice",
+            "Supplier",
+            "Subtotal",
+            "GST",
+            "Total",
+            "Date"
+        ];
+
+    }else if(type==="stock"){
+
+        headers = [
+            "Medicine",
+            "Batch",
+            "Stock",
+            "Minimum",
+            "Sale Rate",
+            "MRP"
+        ];
+
+    }else{
+
+        headers = [
+            "Return No.",
+            "Invoice",
+            "Customer",
+            "Refund",
+            "Amount",
+            "Date"
+        ];
+    }
+
+    $("reportResult").innerHTML = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    ${headers.map(
+                        h => `<th>${h}</th>`
+                    ).join("")}
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${list.map(row=>{
+
+                    if(type==="sales"){
+
+                        return `
+
+                        <tr>
+
+                            <td>
+                                ${escapeHtml(
+                                    row.invoice_no ||
+                                    row.invoiceNo ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    row.patient_name ||
+                                    row.patientName ||
+                                    "Walk-in"
+                                )}
+                            </td>
+
+                            <td>
+                                ${money(
+                                    row.subtotal
+                                )}
+                            </td>
+
+                            <td>
+                                ${money(
+                                    row.gst_amount ??
+                                    row.gstAmount
+                                )}
+                            </td>
+
+                            <td>
+                                ${money(
+                                    row.discount
+                                )}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    ${money(
+                                        row.grand_total ??
+                                        row.grandTotal
+                                    )}
+                                </strong>
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    row.sale_date ||
+                                    row.saleDate ||
+                                    "-"
+                                )}
+                            </td>
+
+                        </tr>
+
+                        `;
+
+                    }
+
+                    if(type==="purchase"){
+
+                        return `
+
+                        <tr>
+
+                            <td>
+                                ${escapeHtml(
+                                    row.invoice_no ||
+                                    row.invoiceNo ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    row.supplier_name ||
+                                    row.supplierName ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${money(row.subtotal)}
+                            </td>
+
+                            <td>
+                                ${money(
+                                    row.gst_amount ??
+                                    row.gstAmount
+                                )}
+                            </td>
+
+                            <td>
+                                ${money(
+                                    row.grand_total ??
+                                    row.grandTotal
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    row.invoice_date ||
+                                    row.invoiceDate ||
+                                    "-"
+                                )}
+                            </td>
+
+                        </tr>
+
+                        `;
+
+                    }
+
+                    if(type==="stock"){
+
+                        return `
+
+                        <tr>
+
+                            <td>
+                                ${escapeHtml(
+                                    row.medicine_name ||
+                                    row.medicineName ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    row.batch_no ||
+                                    row.batchNo ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${row.current_stock ??
+                                 row.currentStock ??
+                                 0}
+                            </td>
+
+                            <td>
+                                ${row.minimum_stock ??
+                                 row.minimumStock ??
+                                 0}
+                            </td>
+
+                            <td>
+                                ${money(
+                                    row.sale_rate ??
+                                    row.saleRate
+                                )}
+                            </td>
+
+                            <td>
+                                ${money(row.mrp)}
+                            </td>
+
+                        </tr>
+
+                        `;
+
+                    }
+
+                    return `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHtml(
+                                row.return_number ||
+                                row.returnNumber ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                row.invoice_no ||
+                                row.invoiceNo ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                row.customer_name ||
+                                row.customerName ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                row.refund_method ||
+                                row.refundMethod ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(
+                                row.total_amount ??
+                                row.totalAmount
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                row.created_at ||
+                                row.createdAt ||
+                                "-"
+                            )}
+                        </td>
+
+                    </tr>
+
+                    `;
+
+                }).join("")}
+
+            </tbody>
+
+        </table>
+    `;
+}
+
+
+/* ============================================================
+   PRINT SALE
+============================================================ */
+
+function printSale(sale){
+
+    const invoice =
+        sale.invoice_no ||
+        sale.invoiceNo ||
+        $("saleInvoice").value;
+
+    const customer =
+        sale.patient_name ||
+        sale.patientName ||
+        "Walk-in Customer";
+
+    const items =
+        normalizeList(
+            sale,
+            ["items","saleItems"]
+        );
+
+    const totals =
+        calculateSaleTotal();
+
+    $("printArea").innerHTML = `
+
+        <div style="
+            max-width:800px;
+            margin:auto;
+            padding:25px;
+            font-family:Arial">
+
+            <div style="
+                text-align:center;
+                border-bottom:2px solid #111;
+                padding-bottom:12px">
+
+                <h1>PHARMACY</h1>
+
+                <p>
+                    Pharmacy Management System
+                </p>
+
+                <h2 style="margin-top:10px">
+                    TAX INVOICE
+                </h2>
+
+            </div>
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                margin:15px 0">
+
+                <div>
+                    <strong>Invoice:</strong>
+                    ${escapeHtml(invoice)}
+                </div>
+
+                <div>
+                    <strong>Date:</strong>
+                    ${today()}
+                </div>
+
+            </div>
+
+            <p>
+                <strong>Customer:</strong>
+                ${escapeHtml(customer)}
+            </p>
+
+            <table style="
+                width:100%;
+                border-collapse:collapse;
+                margin-top:15px">
+
+                <thead>
+
+                    <tr>
+
+                        <th style="border:1px solid #111;padding:7px">
+                            Medicine
+                        </th>
+
+                        <th style="border:1px solid #111;padding:7px">
+                            Qty
+                        </th>
+
+                        <th style="border:1px solid #111;padding:7px">
+                            Rate
+                        </th>
+
+                        <th style="border:1px solid #111;padding:7px">
+                            GST
+                        </th>
+
+                        <th style="border:1px solid #111;padding:7px">
+                            Total
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    ${
+                        saleItems.map(item=>{
+
+                            const base =
+                                item.quantity *
+                                item.saleRate;
+
+                            const gst =
+                                base *
+                                item.gstPercent /
+                                100;
+
+                            return `
+
+                            <tr>
+
+                                <td style="border:1px solid #111;padding:7px">
+                                    ${escapeHtml(
+                                        item.medicineName
+                                    )}
+                                </td>
+
+                                <td style="border:1px solid #111;padding:7px">
+                                    ${item.quantity}
+                                </td>
+
+                                <td style="border:1px solid #111;padding:7px">
+                                    ${money(
+                                        item.saleRate
+                                    )}
+                                </td>
+
+                                <td style="border:1px solid #111;padding:7px">
+                                    ${money(gst)}
+                                </td>
+
+                                <td style="border:1px solid #111;padding:7px">
+                                    ${money(
+                                        base+gst
+                                    )}
+                                </td>
+
+                            </tr>
+
+                            `;
+                        }).join("")
+                    }
+
+                </tbody>
+
+            </table>
+
+            <div style="
+                margin-left:auto;
+                width:300px;
+                margin-top:20px">
+
+                <p>
+                    Subtotal:
+                    <strong style="float:right">
+                        ${money(totals.subtotal)}
+                    </strong>
+                </p>
+
+                <p>
+                    GST:
+                    <strong style="float:right">
+                        ${money(totals.gstAmount)}
+                    </strong>
+                </p>
+
+                <p>
+                    Discount:
+                    <strong style="float:right">
+                        ${money(totals.discount)}
+                    </strong>
+                </p>
+
+                <hr>
+
+                <h2>
+                    Grand Total:
+                    <strong style="float:right">
+                        ${money(totals.grand)}
+                    </strong>
+                </h2>
+
+            </div>
+
+            <div style="
+                margin-top:50px;
+                text-align:center">
+
+                <p>Thank You</p>
+                <p>Get Well Soon</p>
+
+            </div>
+
+        </div>
+    `;
+
+    window.print();
+}
+
+
+/* ============================================================
+   PRINT RETURN
+============================================================ */
+
+function printReturn(ret){
+
+    const number =
+        ret.return_number ||
+        ret.returnNumber ||
+        "SALES RETURN";
+
+    const invoice =
+        ret.invoice_no ||
+        ret.invoiceNo ||
+        currentReturnBill?.invoice_no ||
+        "-";
+
+    const customer =
+        ret.customer_name ||
+        ret.customerName ||
+        "Customer";
+
+    const amount =
+        ret.total_amount ??
+        ret.totalAmount ??
+        calculateReturnTotal();
+
+    $("printArea").innerHTML = `
+
+        <div style="
+            max-width:700px;
+            margin:auto;
+            padding:30px;
+            font-family:Arial">
+
+            <div style="
+                text-align:center;
+                border-bottom:2px solid #111;
+                padding-bottom:15px">
+
+                <h1>PHARMACY</h1>
+
+                <h2>SALES RETURN RECEIPT</h2>
+
+            </div>
+
+            <div style="margin-top:20px">
+
+                <p>
+                    <strong>Return No:</strong>
+                    ${escapeHtml(number)}
+                </p>
+
+                <p style="margin-top:8px">
+                    <strong>Original Invoice:</strong>
+                    ${escapeHtml(invoice)}
+                </p>
+
+                <p style="margin-top:8px">
+                    <strong>Customer:</strong>
+                    ${escapeHtml(customer)}
+                </p>
+
+                <p style="margin-top:8px">
+                    <strong>Refund Method:</strong>
+                    ${escapeHtml(
+                        ret.refund_method ||
+                        ret.refundMethod ||
+                        $("refundMethod").value
+                    )}
+                </p>
+
+            </div>
+
+            <div style="
+                margin-top:30px;
+                padding:20px;
+                border:2px solid #111;
+                text-align:center">
+
+                <p>Return Amount</p>
+
+                <h1>
+                    ${money(amount)}
+                </h1>
+
+            </div>
+
+            <div style="
+                text-align:center;
+                margin-top:40px">
+
+                <p>
+                    Return processed successfully
+                </p>
+
+                <p>
+                    Thank You
+                </p>
+
+            </div>
+
+        </div>
+    `;
+
+    window.print();
+}
+
+
+/* ============================================================
+   MODALS
+============================================================ */
+
+function closeModal(id){
+
+    $(id)
+        .classList
+        .remove("show");
+}
+
+
+window.addEventListener(
+    "click",
+    function(e){
+
+        document
+            .querySelectorAll(".modal")
+            .forEach(modal=>{
+
+                if(e.target === modal){
+                    modal.classList.remove("show");
+                }
+
+            });
+    }
+);
+
+
+/* ============================================================
+   START
+============================================================ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        $("apiDisplay").textContent =
+            API_BASE_URL;
+
+        checkLogin();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
